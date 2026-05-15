@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Large data files — use data/sources.md to document provenance
+data/raw/*
+!data/raw/.gitkeep
+*.nc
+*.nc4
+*.h5
+*.hdf5
+*.zarr/
+
+# Outputs that regenerate from notebooks
+outputs/figures/*
+!outputs/figures/.gitkeep

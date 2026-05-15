@@ -1,0 +1,202 @@
+{
+  "main": {
+    "id": "b42796b17b06146b",
+    "type": "split",
+    "children": [
+      {
+        "id": "79eb2c09d99b63a8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a005109650a8f22c",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "fa3806dbceba7433",
+    "type": "split",
+    "children": [
+      {
+        "id": "6e31c9c7dc8cf8bf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9f57a5a89982b3fa",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "2ff11f9597a3f621",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "23f60b8803a66bac",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "244b5c2b2ac518dc",
+    "type": "split",
+    "children": [
+      {
+        "id": "8c119882eab9d7d3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "389c5503253fc544",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "32788c9dda3f873d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "86fff0394f95b21b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "4f3d90f1d263a7c0",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "25f04215f067070a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "a005109650a8f22c",
+  "lastOpenFiles": [
+    "2026-05-15.md",
+    "datasets/carbon-majors-database.md",
+    "CONTEXT.md",
+    "INDEX.md",
+    "Welcome.md",
+    "findings/2026-05-15-emissions-to-warming.md",
+    "findings/2026-05-15-carbon-majors-ingest.md",
+    "methods/emissions-to-forcing.md",
+    "methods/far-probability-ratio.md",
+    "datasets/wwa-studies.md",
+    "datasets/cmip6.md",
+    "datasets/emdat.md",
+    "datasets/era5-reanalysis.md",
+    "models",
+    "concepts",
+    "findings",
+    "methods",
+    "datasets",
+    "disasters",
+    "entities"
+  ]
+}
