@@ -1,6 +1,6 @@
 ---
 type: index
-last_updated: 2026-05-14
+last_updated: 2026-05-18
 ---
 
 # Wiki Index
@@ -20,13 +20,14 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 - [[datasets/wwa-studies]] — World Weather Attribution pre-computed FAR/PR studies
 
 ## Methods
-*(none yet)*
+- [[methods/far-probability-ratio]] — FAR and PR definitions, estimation from CMIP6, liability application
+- [[methods/emissions-to-forcing]] — entity emissions → warming contribution via proportionality / FaIR
 
 ## Entities
 *(none yet)*
 
 ## Disasters
-*(none yet)*
+- [[disasters/black-summer-2019-20]] — 2019–20 Australian bushfires; PR≥4; AUD 2.3–103B damages
 
 ## Concepts
 *(none yet)*
@@ -37,3 +38,4 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 ## Findings
 - [[findings/2026-05-15-carbon-majors-ingest]] — 1,435 GtCO₂e total; 13 entities = 50% of emissions; 69% post-1988; 88% scope 3
 - [[findings/2026-05-15-emissions-to-warming]] — Saudi Aramco 44.7 m°C, ExxonMobil 37.6 m°C; Carbon Majors = 45% of total 1.18°C warming
+- [[findings/2026-05-18-black-summer-liability]] — first end-to-end chain; central: USD 6.1B CM liability; damage uncertainty dominates over attribution uncertainty

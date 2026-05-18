@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "79eb2c09d99b63a8",
+        "id": "09896a904c5748cf",
         "type": "tabs",
         "children": [
           {
-            "id": "a005109650a8f22c",
+            "id": "917ca727ffbef630",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "disasters/black-summer-2019-20.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "black-summer-2019-20"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "disasters/black-summer-2019-20.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for black-summer-2019-20"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "disasters/black-summer-2019-20.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from black-summer-2019-20"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "disasters/black-summer-2019-20.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of black-summer-2019-20"
             }
           }
         ]
@@ -176,15 +183,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "a005109650a8f22c",
+  "active": "917ca727ffbef630",
   "lastOpenFiles": [
-    "2026-05-15.md",
-    "datasets/carbon-majors-database.md",
-    "CONTEXT.md",
+    "findings/2026-05-18-black-summer-liability.md",
+    "disasters/black-summer-2019-20.md",
     "INDEX.md",
     "Welcome.md",
-    "findings/2026-05-15-emissions-to-warming.md",
+    "CONTEXT.md",
     "findings/2026-05-15-carbon-majors-ingest.md",
+    "2026-05-15.md",
+    "datasets/carbon-majors-database.md",
+    "findings/2026-05-15-emissions-to-warming.md",
     "methods/emissions-to-forcing.md",
     "methods/far-probability-ratio.md",
     "datasets/wwa-studies.md",
