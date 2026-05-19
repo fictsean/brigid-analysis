@@ -62,20 +62,51 @@ last_updated: YYYY-MM-DD
 
 ## Key External Resources
 
-- Carbon Majors database: climateaccountability.org
+- Carbon Majors database: carbonmajors.org (InfluenceMap) — free download, T&C click-through required
 - WWA studies: worldweatherattribution.org
-- CMIP6 data: ESGF nodes or pangeo-forge.org
-- ERA5 reanalysis: Copernicus Climate Data Store (CDS)
-- Disaster records: EM-DAT (emdat.be) — requires free academic registration
+- CMIP6 data: pangeo (preferred, cloud zarr) or ESGF nodes
+- ERA5 reanalysis: Copernicus Climate Data Store (CDS) — free account + `~/.cdsapirc` key required
+- Disaster records: EM-DAT (emdat.be) — free academic registration required, not yet downloaded
 - Key paper: Ekwurzel et al. (2017) "The rise in global atmospheric CO2, surface temperature, and sea level from emissions traced to major carbon producers"
+- FaIR model: https://github.com/OMS-NetZero/FAIR — v2.2 with fair-calibrate v1.4 posterior (841 configs)
 
 ## Conventions
 
-- Notebooks are numbered and named: `01-exploration/01_carbon_majors_ingest.ipynb`
+- Notebooks are numbered and named: `01-exploration/02_carbon_majors_ingest.ipynb`
 - Every notebook that produces a meaningful result gets a corresponding `wiki/findings/YYYY-MM-DD-slug.md` page
 - All uncertainty estimates are expressed as 5th–95th percentile ranges unless stated otherwise
 - Physical attribution (contribution to risk) is kept strictly separate from legal liability framing
+- Processed data saved as parquet; figures saved to `outputs/figures/` (gitignored)
 
-## Current Status
+## Completed Work (as of 2026-05-19)
 
-Project initialized 2026-05-14. No notebooks yet. Next step: ingest Carbon Majors emissions data, ERA5 temperature anomalies, and EM-DAT disaster records as the foundation for the first attribution pipeline.
+### Data
+- `data/raw/carbon_majors/emissions_high_granularity.csv` — downloaded, 178 entities 1854–2024
+- EM-DAT, ERA5, CMIP6 — not yet downloaded
+
+### Notebooks
+1. `01-exploration/01_environment_check.ipynb` — verifies all packages and pangeo connectivity
+2. `01-exploration/02_carbon_majors_ingest.ipynb` — loads Carbon Majors, produces entity-year and cumulative summary parquets
+3. `02-attribution/01_emissions_to_warming.ipynb` — FaIR v2.2 warming attribution, 841-config AR6 posterior ensemble
+4. `03-liability/01_black_summer_liability.ipynb` — first end-to-end chain; Black Summer 2019–20
+
+### Key processed files
+- `data/processed/cm_entity_year.parquet` — entity × year emissions
+- `data/processed/cm_cumulative_summary.parquet` — cumulative totals and global share per entity
+- `data/processed/entity_warming_contribution.parquet` — per-entity warming (p05/p50/p95)
+- `data/processed/fair_global_temperature.parquet` — FaIR ensemble temperature timeseries
+- `data/processed/black_summer_liability.parquet` — entity liability estimates, three scenarios
+
+### Wiki findings
+- `wiki/findings/2026-05-15-carbon-majors-ingest.md`
+- `wiki/findings/2026-05-15-emissions-to-warming.md`
+- `wiki/findings/2026-05-18-black-summer-liability.md`
+
+## Current Status / Next Steps
+
+End-to-end pipeline proven on Black Summer 2019–20 (central result: USD 6.1B Carbon Majors liability).
+
+Immediate next steps:
+- Register for EM-DAT to enable multi-event scaling
+- Add regional amplification factor for Australia to tighten global→regional warming link
+- Design web API layer for serving per-event liability tables
