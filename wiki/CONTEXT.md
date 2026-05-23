@@ -1,6 +1,6 @@
 ---
 type: context
-last_updated: 2026-05-14
+last_updated: 2026-05-23
 ---
 
 # Brigid Analysis — Project Context
@@ -36,9 +36,23 @@ Each step is quantified with 5–95th percentile uncertainty ranges. Physical at
 
 ## Current Research Phase
 
-**Phase 1 — Data Ingestion & Exploration** (active)
+**Phase 3 — Attribution Pipeline Refinement** (active)
 
-Ingest and validate Carbon Majors, ERA5, and EM-DAT as the foundation for the first attribution pipeline. No results yet.
+End-to-end liability pipeline proven on Black Summer 2019–20 (central result: USD 6.1B Carbon Majors liability). Now tightening the global→regional warming link and replacing borrowed WWA PR values with independently computed CMIP6 estimates.
+
+Completed:
+- Full Carbon Majors ingestion (1,435 GtCO₂e, 178 entities, 1854–2024)
+- FaIR v2.2 emissions-to-warming attribution (841-config AR6 posterior ensemble)
+- SE Australia regional amplification from CMIP6 historical (ensemble median 0.935; models underestimate observed ~1.35 — estimates are conservative lower bounds)
+- End-to-end Black Summer liability pipeline (WWA-borrowed PR; three damage scenarios)
+
+In progress:
+- Independent PR computation from CMIP6 hist vs hist-nat tasmax (4 models, 19 member-runs, 2000-iteration bootstrap)
+
+Pending:
+- EM-DAT ingestion for multi-event scaling
+- ERA5 regional trend verification
+- Web API layer
 
 ## Wiki Navigation
 

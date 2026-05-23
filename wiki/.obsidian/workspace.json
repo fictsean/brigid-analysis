@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "09896a904c5748cf",
+        "id": "82666be931ab7357",
         "type": "tabs",
         "children": [
           {
-            "id": "917ca727ffbef630",
+            "id": "da3bf52ecc4c8c60",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "disasters/black-summer-2019-20.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "black-summer-2019-20"
+              "title": "New tab"
             }
           }
         ]
@@ -94,7 +90,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "disasters/black-summer-2019-20.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +99,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for black-summer-2019-20"
+              "title": "Backlinks"
             }
           },
           {
@@ -113,12 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "disasters/black-summer-2019-20.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from black-summer-2019-20"
+              "title": "Outgoing links"
             }
           },
           {
@@ -156,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "disasters/black-summer-2019-20.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of black-summer-2019-20"
+              "title": "Outline"
             }
           }
         ]
@@ -183,10 +176,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "917ca727ffbef630",
+  "active": "da3bf52ecc4c8c60",
   "lastOpenFiles": [
-    "findings/2026-05-18-black-summer-liability.md",
+    "findings/2026-05-24-black-summer-pr-cmip6.md",
+    "findings/far-probability-ratio.md",
+    "ekwurzel-2017.md",
     "disasters/black-summer-2019-20.md",
+    "findings/2026-05-23-australia-regional-amplification.md",
+    "findings/2026-05-18-black-summer-liability.md",
     "INDEX.md",
     "Welcome.md",
     "CONTEXT.md",

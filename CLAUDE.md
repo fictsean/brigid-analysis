@@ -78,35 +78,43 @@ last_updated: YYYY-MM-DD
 - Physical attribution (contribution to risk) is kept strictly separate from legal liability framing
 - Processed data saved as parquet; figures saved to `outputs/figures/` (gitignored)
 
-## Completed Work (as of 2026-05-19)
+## Completed Work (as of 2026-05-23)
 
 ### Data
 - `data/raw/carbon_majors/emissions_high_granularity.csv` — downloaded, 178 entities 1854–2024
-- EM-DAT, ERA5, CMIP6 — not yet downloaded
+- CMIP6 — streamed on demand from pangeo zarr (no local download needed)
+- EM-DAT, ERA5 — not yet downloaded
 
 ### Notebooks
 1. `01-exploration/01_environment_check.ipynb` — verifies all packages and pangeo connectivity
 2. `01-exploration/02_carbon_majors_ingest.ipynb` — loads Carbon Majors, produces entity-year and cumulative summary parquets
 3. `02-attribution/01_emissions_to_warming.ipynb` — FaIR v2.2 warming attribution, 841-config AR6 posterior ensemble
-4. `03-liability/01_black_summer_liability.ipynb` — first end-to-end chain; Black Summer 2019–20
+4. `02-attribution/02_australia_regional_amplification.ipynb` — CMIP6 historical SE AU amplification factor; ACCESS-CM2 + ACCESS-ESM1-5
+5. `02-attribution/03_black_summer_pr_cmip6.ipynb` — independent PR computation from CMIP6 hist vs hist-nat; BCC-CSM2-MR, GFDL-ESM4, IPSL-CM6A-LR, MRI-ESM2-0 (in progress)
+6. `03-liability/01_black_summer_liability.ipynb` — first end-to-end chain; Black Summer 2019–20
 
 ### Key processed files
 - `data/processed/cm_entity_year.parquet` — entity × year emissions
 - `data/processed/cm_cumulative_summary.parquet` — cumulative totals and global share per entity
-- `data/processed/entity_warming_contribution.parquet` — per-entity warming (p05/p50/p95)
+- `data/processed/entity_warming_contribution.parquet` — per-entity warming (p05/p50/p95) + warming_au_* columns
 - `data/processed/fair_global_temperature.parquet` — FaIR ensemble temperature timeseries
-- `data/processed/black_summer_liability.parquet` — entity liability estimates, three scenarios
+- `data/processed/au_amplification_factor.csv` — per-model SE AU amplification; ensemble median 0.935
+- `data/processed/black_summer_liability.parquet` — entity liability estimates (WWA PR scenarios + au_warming_share + liability_au_* columns)
+- `data/processed/black_summer_pr_cmip6.csv` — CMIP6-derived PR at multiple thresholds (PR=0.6, null result — do not use for liability)
+- `data/processed/black_summer_pr_bootstrap.parquet` — 2,000-iteration bootstrap samples (PR range 0.5–0.7)
 
 ### Wiki findings
 - `wiki/findings/2026-05-15-carbon-majors-ingest.md`
 - `wiki/findings/2026-05-15-emissions-to-warming.md`
 - `wiki/findings/2026-05-18-black-summer-liability.md`
+- `wiki/findings/2026-05-23-australia-regional-amplification.md` — CMIP6 SE AU amplification 0.935; models underestimate observed (~1.35); liability estimates are conservative lower bounds
+- `wiki/findings/2026-05-24-black-summer-pr-cmip6.md` — CMIP6 PR verification null result (PR=0.6); available hist-nat model subset does not reproduce AU warming signal; WWA PR values stand
 
 ## Current Status / Next Steps
 
-End-to-end pipeline proven on Black Summer 2019–20 (central result: USD 6.1B Carbon Majors liability).
+End-to-end pipeline proven on Black Summer 2019–20 (central result: USD 6.1B Carbon Majors liability). Regional amplification factor computed and incorporated. Independent CMIP6 PR computation underway.
 
 Immediate next steps:
+- Add BoM observed amplification (~1.35) as additional scenario in Black Summer liability notebook
 - Register for EM-DAT to enable multi-event scaling
-- Add regional amplification factor for Australia to tighten global→regional warming link
 - Design web API layer for serving per-event liability tables
