@@ -62,6 +62,6 @@ This is legally significant: if liability frameworks exclude scope 3, attributed
 
 ## Next Steps
 
-- Ingest EM-DAT disaster records to pair warming contributions with specific events
-- Apply FAR/PR methodology to compute P(event) change attributable to this warming
-- Begin building the damages × FAR × entity_share liability calculation
+- Ingest EM-DAT disaster records to pair warming contributions with additional events (requires registration)
+- ✅ Applied to Black Summer 2019–20 — see [[2026-05-18-black-summer-liability]]
+- ✅ Regional amplification applied — see [[2026-05-23-australia-regional-amplification]]

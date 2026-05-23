@@ -45,4 +45,4 @@ Cross-check against published launch report figure (1,421 GtCO₂e through 2022)
 ## Next Steps
 
 - Cross-reference entity list against EM-DAT disaster records to identify which entities are defendants in existing climate litigation
-- Feed `cm_entity_year.parquet` into a simple climate model (FaIR) to estimate each entity's contribution to global mean temperature rise (the [[emissions-to-forcing]] step)
+- ✅ Fed into FaIR v2.2 — see [[2026-05-15-emissions-to-warming]]

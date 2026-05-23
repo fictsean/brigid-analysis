@@ -5,7 +5,7 @@ tags: [black-summer, bushfire, australia, liability, far, fair, end-to-end]
 related: [2026-05-15-carbon-majors-ingest, 2026-05-15-emissions-to-warming, far-probability-ratio, emissions-to-forcing, wwa-studies]
 status: active
 confidence: medium
-last_updated: 2026-05-18
+last_updated: 2026-05-24
 notebook: notebooks/03-liability/01_black_summer_liability.ipynb
 ---
 
@@ -88,7 +88,7 @@ This is important for litigation framing: debates about the attribution science 
 
 ## Caveats
 
-1. **Global vs regional attribution**: entity warming shares are global mean. Australian fire weather has regional amplification — actual attribution may be higher.
+1. **Global vs regional attribution**: entity warming shares are global mean. A CMIP6-derived SE Australia amplification factor of 0.935 has been applied (notebook 02). BoM observations suggest true amplification is ~1.35, so estimates remain conservative lower bounds — see [[2026-05-23-australia-regional-amplification]].
 2. **Scope 3 contested**: ~88% of attributed warming comes from scope 3 (product combustion). If liability frameworks exclude scope 3, per-entity figures shrink ~9×.
 3. **Legal ≠ physical**: these are risk-proportional estimates, not legal determinations. Proximate cause, foreseeability, and jurisdictional standards all affect legal liability.
 4. **Carbon Majors coverage**: ~45% of global fossil CO2, not 100% — total climate-attributed damages are larger than the CM share computed here.
@@ -104,6 +104,6 @@ This is important for litigation framing: debates about the attribution science 
 ## Next Steps
 
 - Apply the same pipeline to additional events (extend to a catalogue once EM-DAT is available)
-- Add regional amplification factor for Australian temperature trend to tighten the global→regional link
+- Replace WWA-borrowed PR with ERA5-anchored PR once CDS API key is set up — see [[2026-05-24-black-summer-pr-cmip6]]
 - Model scope 1-only liability as an alternative for legally conservative estimates
 - Begin web API design to serve per-event liability tables

@@ -2,10 +2,10 @@
 type: dataset
 name: carbon-majors-database
 tags: [emissions, entities, foundational]
-related: [era5-reanalysis, emdat, ekwurzel-2017]
-status: stub
+related: [era5-reanalysis, emdat, ekwurzel-2017, 2026-05-15-carbon-majors-ingest]
+status: active
 confidence: high
-last_updated: 2026-05-14
+last_updated: 2026-05-24
 ---
 
 # Carbon Majors Database

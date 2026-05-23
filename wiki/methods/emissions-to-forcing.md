@@ -1,11 +1,11 @@
 ---
 type: method
 name: emissions-to-forcing
-tags: [attribution, emissions, warming, liability]
-related: [carbon-majors-database, far-probability-ratio, ekwurzel-2017]
-status: stub
-confidence: medium
-last_updated: 2026-05-14
+tags: [attribution, emissions, warming, liability, fair]
+related: [carbon-majors-database, far-probability-ratio, ekwurzel-2017, 2026-05-15-emissions-to-warming]
+status: active
+confidence: high
+last_updated: 2026-05-24
 ---
 
 # Emissions to Forcing Attribution
@@ -35,11 +35,17 @@ This approach assumes warming scales linearly with cumulative emissions — a re
 - Ignores timing effects (early vs. late emissions have different atmospheric residence)
 - Natural carbon sinks are treated as proportionally reducing all emitters equally
 
-## Refinements to Consider
+## Implementation: FaIR v2.2
 
-1. **Simple climate model (MAGICC/FAIR)**: run each entity's emission trajectory through a reduced-complexity climate model to get entity-specific forcing estimate
-2. **Impulse response functions**: convolve emission pulse with atmospheric response function for better temporal accuracy
-3. **Multi-gas weighting**: convert CH4, N2O to CO2e using GWP100 or GWP20 before summing
+We use FaIR v2.2 (Finite Amplitude Impulse Response model) with the fair-calibrate v1.4 posterior ensemble (841 configs, constrained against IPCC AR6). This replaces MAGICC from Ekwurzel et al. (2017) with a more recent, better-constrained model.
+
+Key implementation choices:
+- **Proportional attribution** rather than per-entity model runs: entity_warming = (entity_cumulative_CO2e / global_cumulative_fossil_CO2) × FaIR_ΔT. Valid under TCRE linearity.
+- **Global denominator**: RCMIP CO2 FFI historical emissions (consistent with Global Carbon Project)
+- **Uncertainty**: 841-member posterior ensemble gives 5–95th percentile warming ranges
+- **Validation**: FaIR median gives 1.04°C for 2011–2020 vs IPCC AR6 best estimate of 1.07°C ✓
+
+See [[findings/2026-05-15-emissions-to-warming]] for results.
 
 ## Liability Fraction
 

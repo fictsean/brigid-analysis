@@ -2,10 +2,10 @@
 type: dataset
 name: cmip6
 tags: [climate-models, counterfactual, scenarios]
-related: [era5-reanalysis, methods/far-probability-ratio]
-status: stub
+related: [era5-reanalysis, methods/far-probability-ratio, 2026-05-23-australia-regional-amplification, 2026-05-24-black-summer-pr-cmip6]
+status: active
 confidence: medium
-last_updated: 2026-05-14
+last_updated: 2026-05-24
 ---
 
 # CMIP6 Climate Model Outputs
@@ -48,11 +48,25 @@ Coupled Model Intercomparison Project Phase 6. A coordinated ensemble of global 
 | `hist-nat` | Natural forcing only (counterfactual — no human emissions) |
 | `piControl` | Pre-industrial control (no trend baseline) |
 
-## Caveats
+## Local Catalog Cache
+
+The pangeo catalog JSON + CSV (80MB) is cached locally at `data/processed/pangeo-cmip6.json` and `data/processed/pangeo-cmip6.csv`. Load via:
+```python
+col = intake.open_esm_datastore('data/processed/pangeo-cmip6.json')
+```
+This avoids the slow GCS catalog fetch on every run.
+
+## Australian Regional Caveats
+
+CMIP6 models **underestimate SE Australian warming** — ensemble amplification (SE AU / global) is 0.93 in CMIP6 vs ~1.35 observed (BoM). This is documented in [[2026-05-23-australia-regional-amplification]].
+
+For PR calculation, only 4 models have both `historical` and `hist-nat` `tasmax` on pangeo (BCC-CSM2-MR, GFDL-ESM4, IPSL-CM6A-LR, MRI-ESM2-0). These models produce PR ≈ 0.6 for SE Australian heat — a null result that reflects model underestimation, not physical reality. ERA5 is needed to anchor the factual distribution. See [[2026-05-24-black-summer-pr-cmip6]].
+
+## General Caveats
 
 - Use multi-model ensembles (10+ models) to characterize structural uncertainty
 - Models have different climate sensitivities — report spread, not just ensemble mean
-- `hist-nat` runs are not available for all models
+- `hist-nat` runs are not available for all models; available subset is non-representative for Australia
 
 ## Related
 

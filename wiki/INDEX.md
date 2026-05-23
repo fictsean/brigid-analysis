@@ -11,6 +11,7 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 
 ## Meta
 - [[CONTEXT]] — project overview, attribution chain, data sources, current phase
+- [[ekwurzel-2017]] — Ekwurzel et al. (2017), foundational paper tracing warming to named producers via MAGICC
 
 ## Datasets
 - [[datasets/carbon-majors-database]] — emissions by company-year 1854–present, Heede (2014), ~100 producers
