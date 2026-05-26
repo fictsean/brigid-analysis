@@ -66,7 +66,7 @@ last_updated: YYYY-MM-DD
 - WWA studies: worldweatherattribution.org
 - CMIP6 data: pangeo (preferred, cloud zarr) or ESGF nodes
 - ERA5 reanalysis: Copernicus Climate Data Store (CDS) — free account + `~/.cdsapirc` key required
-- Disaster records: EM-DAT (emdat.be) — free academic registration required, not yet downloaded
+- Disaster records: EM-DAT (emdat.be) — downloaded; `data/raw/emdat/emdat_global_natural.csv` (22.9 MB, gitignored)
 - Key paper: Ekwurzel et al. (2017) "The rise in global atmospheric CO2, surface temperature, and sea level from emissions traced to major carbon producers"
 - FaIR model: https://github.com/OMS-NetZero/FAIR — v2.2 with fair-calibrate v1.4 posterior (841 configs)
 
@@ -78,23 +78,24 @@ last_updated: YYYY-MM-DD
 - Physical attribution (contribution to risk) is kept strictly separate from legal liability framing
 - Processed data saved as parquet; figures saved to `outputs/figures/` (gitignored)
 
-## Completed Work (as of 2026-05-24)
+## Completed Work (as of 2026-05-26)
 
 ### Data
 - `data/raw/carbon_majors/emissions_high_granularity.csv` — downloaded, 178 entities 1854–2024
 - CMIP6 — streamed on demand from pangeo zarr (no local download needed)
 - ERA5 daily mx2t — downloaded, `data/raw/era5/era5_mx2t_daily_se_australia_1961_2020.nc` (83 MB, gitignored)
-- EM-DAT — not yet downloaded
+- EM-DAT — downloaded; `data/raw/emdat/emdat_global_natural.csv` (22.9 MB, gitignored)
 
 ### Notebooks
 1. `01-exploration/01_environment_check.ipynb` — verifies all packages and pangeo connectivity
 2. `01-exploration/02_carbon_majors_ingest.ipynb` — loads Carbon Majors, produces entity-year and cumulative summary parquets
-3. `02-attribution/01_emissions_to_warming.ipynb` — FaIR v2.2 warming attribution, 841-config AR6 posterior ensemble
-4. `02-attribution/02_australia_regional_amplification.ipynb` — CMIP6 historical SE AU amplification factor; ACCESS-CM2 + ACCESS-ESM1-5
-5. `02-attribution/03_black_summer_pr_cmip6.ipynb` — independent PR computation from CMIP6 hist vs hist-nat; null result PR=0.6; do not use for liability
-6. `02-attribution/04_black_summer_pr_era5.ipynb` — ERA5 daily mx2t + CMIP6 hist-nat bootstrap (4 models, cftime bug fixed); PR=1.8 [1.0–2.9] median; 3.3 at 99th pct; **primary PR source**
-7. `02-attribution/05_observed_amplification.ipynb` — ERA5 observed SE AU fire-season amplification = 0.726; CMIP6 = 0.935; obs-corrected liability 1.96B
-8. `03-liability/01_black_summer_liability.ipynb` — first end-to-end chain; Black Summer 2019–20; ERA5 bootstrap central liability USD 3.07B
+3. `01-exploration/03_emdat_ingest.ipynb` — loads EM-DAT CSV, normalises columns, CPI-adjusts damages to 2020 USD, saves parquet; 17,849 natural disaster records; Black Summer validation shows EM-DAT splits event into sub-events (Currowan: USD 2B), so hardcoded PBO/ICA scenarios remain primary for Black Summer
+4. `02-attribution/01_emissions_to_warming.ipynb` — FaIR v2.2 warming attribution, 841-config AR6 posterior ensemble
+5. `02-attribution/02_australia_regional_amplification.ipynb` — CMIP6 historical SE AU amplification factor; ACCESS-CM2 + ACCESS-ESM1-5
+6. `02-attribution/03_black_summer_pr_cmip6.ipynb` — independent PR computation from CMIP6 hist vs hist-nat; null result PR=0.6; do not use for liability
+7. `02-attribution/04_black_summer_pr_era5.ipynb` — ERA5 daily mx2t + CMIP6 hist-nat bootstrap (4 models, cftime bug fixed); PR=1.8 [1.0–2.9] (conservative floor); Section 8: detrended ERA5 approach shifts P0 by Δ=0.689°C → PR=3.8 [2.4–7.4], FAR=73.6%, USD 5.1B — **primary PR/liability source**
+8. `02-attribution/05_observed_amplification.ipynb` — ERA5 observed SE AU fire-season amplification = 0.726; CMIP6 = 0.935; obs-corrected liability 1.96B
+9. `03-liability/01_black_summer_liability.ipynb` — first end-to-end chain; Black Summer 2019–20; ERA5 detrended central liability USD 5.1B; EM-DAT lookup cell included
 
 ### Key processed files
 - `data/processed/cm_entity_year.parquet` — entity × year emissions
@@ -107,8 +108,13 @@ last_updated: YYYY-MM-DD
 - `data/processed/black_summer_pr_bootstrap.parquet` — 2,000-iteration bootstrap samples (PR range 0.5–0.7, CMIP6 null result)
 - `data/processed/black_summer_pr_era5.csv` — ERA5 daily mx2t + hist-nat PR at 4 thresholds (median 1.80; 99th pct 3.27; 4-model corrected run)
 - `data/processed/black_summer_pr_era5_bootstrap.parquet` — 2,000-iteration ERA5 bootstrap samples (PR median 1.80)
+- `data/processed/black_summer_pr_detrended_bootstrap.parquet` — 2,000-iteration bootstrap for detrended ERA5 P0 (PR median 3.8 [2.4–7.4])
 - `data/processed/observed_amplification_factor.csv` — ERA5 observed amplification with trend metadata
+- `data/processed/emdat_disasters.parquet` — cleaned EM-DAT natural disasters, 17,849 records (gitignored — EM-DAT Data Use Agreement)
 - `data/raw/era5/era5_mx2t_daily_se_australia_1961_2020.nc` — ERA5 daily mx2t, 83 MB, gitignored
+
+### Source modules
+- `src/data/emdat.py` — `load_emdat()`, `search_events()`, `get_event_damages()` helpers
 
 ### Wiki findings
 - `wiki/findings/2026-05-15-carbon-majors-ingest.md`
@@ -116,14 +122,14 @@ last_updated: YYYY-MM-DD
 - `wiki/findings/2026-05-18-black-summer-liability.md`
 - `wiki/findings/2026-05-23-australia-regional-amplification.md` — CMIP6 SE AU amplification 0.935 (ACCESS-CM2, ACCESS-ESM1-5)
 - `wiki/findings/2026-05-24-black-summer-pr-cmip6.md` — CMIP6 PR verification null result (PR=0.6); available hist-nat model subset does not reproduce AU warming signal; WWA PR values stand
-- `wiki/findings/2026-05-24-black-summer-pr-era5.md` — ERA5 daily mx2t + hist-nat (4 models, cftime bug fixed): PR=1.8 [1.0–2.9] median; 3.3 at 99th pct; USD 3.07B CM liability
-- `wiki/findings/2026-05-24-observed-amplification.md` — ERA5 fire-season amplification = 0.726 (< CMIP6 0.935); obs-corrected liability 1.96B; ERA5 bootstrap 3.07B is primary
+- `wiki/findings/2026-05-24-black-summer-pr-era5.md` — ERA5 daily mx2t + hist-nat (4 models): PR=1.8 conservative floor; detrended ERA5 PR=3.8 [2.4–7.4] central estimate; FAR 73.6%; USD 5.1B CM liability
+- `wiki/findings/2026-05-24-observed-amplification.md` — ERA5 fire-season amplification = 0.726 (< CMIP6 0.935); obs-corrected liability 1.96B; ERA5 detrended 5.1B is primary
+- `wiki/findings/2026-05-25-emdat-ingest.md` — EM-DAT ingest; 17,849 records; Black Summer fragmented into sub-events (Currowan USD 2B); hardcoded PBO/ICA scenarios remain primary
 
 ## Current Status / Next Steps
 
-End-to-end pipeline proven on Black Summer 2019–20. ERA5 PR (median 1.80 [1.0–2.9]) is the primary source; WWA is validation only. Central liability: USD 3.07B (ERA5 bootstrap median). Note: a cftime calendar bug previously excluded GFDL-ESM4 and BCC-CSM2-MR from the P0 pool; the corrected 4-model run gives a lower PR (1.8 vs 2.7) due to wider natural-variability spread. Observed SE AU fire-season amplification (0.726) is lower than CMIP6 (0.935), so the obs-corrected scenario (1.96B) is a sensitivity lower bound.
+End-to-end pipeline proven on Black Summer 2019–20. Primary PR source: ERA5 detrended approach (Section 8, notebook 07) — PR=3.8 [2.4–7.4], FAR=73.6%, central Carbon Majors liability USD 5.1B. The CMIP6 hist-nat run (PR=1.8) is the conservative lower bound; WWA (PR≥4) is the validation reference. EM-DAT integrated for programmatic damage lookup; for Black Summer, hardcoded PBO/ICA scenarios remain primary because EM-DAT fragments the event into sub-events.
 
 Immediate next steps:
-- Register for EM-DAT to enable multi-event scaling
+- Apply pipeline to a second event (EM-DAT can now provide damage estimates programmatically)
 - Design web API layer for serving per-event liability tables
-- Apply pipeline to a second event

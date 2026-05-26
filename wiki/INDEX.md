@@ -1,6 +1,6 @@
 ---
 type: index
-last_updated: 2026-05-24
+last_updated: 2026-05-26
 ---
 
 # Wiki Index
@@ -46,3 +46,4 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 - [[findings/2026-05-24-black-summer-pr-cmip6]] — CMIP6 hist vs hist-nat PR verification: null result (PR=0.6); available models don't reproduce Australian warming signal; WWA PR values stand
 - [[findings/2026-05-24-black-summer-pr-era5]] — ERA5 daily mx2t: CMIP6 hist-nat P0 PR=1.8 (lower bound); detrended ERA5 P0 PR=3.8 [2.4–7.4] (central estimate); FAR 73.6%; USD 5.1B CM liability
 - [[findings/2026-05-24-observed-amplification]] — ERA5 fire-season amplification = 0.726 (< CMIP6 0.935); obs-corrected liability 1.96B vs ERA5 central 3.07B; ERA5 bootstrap remains primary
+- [[findings/2026-05-25-emdat-ingest]] — EM-DAT ingest; 17,849 records; Black Summer fragmented into sub-events (Currowan USD 2B); hardcoded Deloitte scenarios remain primary

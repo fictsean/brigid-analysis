@@ -233,3 +233,4 @@ data/processed/emdat_disasters.parquet
 outputs/figures/*
 !outputs/figures/.gitkeep
 .cdsapirc
+wiki/.obsidian/workspace.json
