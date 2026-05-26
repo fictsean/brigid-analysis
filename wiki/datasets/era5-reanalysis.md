@@ -6,6 +6,7 @@ related: [cmip6, carbon-majors-database, methods/far-probability-ratio]
 status: stub
 confidence: high
 last_updated: 2026-05-24
+license: CC BY 4.0
 ---
 
 # ERA5 Reanalysis
@@ -36,16 +37,28 @@ ECMWF's fifth-generation atmospheric reanalysis. Combines model data with observ
 
 CMIP6 historical runs underestimate SE Australian warming (~0.93× amplification vs observed ~1.35×). Using CMIP6 historical for the factual distribution gives a factual world that is too cool, which suppresses the PR signal. ERA5 is the observed record — using it for P1 replicates the WWA methodology and avoids this bias. See [[2026-05-24-black-summer-pr-cmip6]].
 
+## License and Attribution
+
+ERA5 is provided under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Any use of ERA5 data or derivatives must:
+
+1. **Credit** Copernicus Climate Change Service (C3S) / ECMWF
+2. **Cite**: Hersbach et al. (2023), DOI: 10.24381/cds.f17050d7
+3. **Include disclaimer**: "Contains modified Copernicus Climate Change Service information. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains."
+4. **Link to the license**: https://creativecommons.org/licenses/by/4.0/
+
+This applies to figures, reports, web applications, and any other outputs that incorporate ERA5 data or statistics derived from it.
+
 ## Access Setup
 
-CDS API key not yet configured. To set up:
+CDS API key configured in `~/.cdsapirc`. To set up on a new machine:
 1. Register free at https://cds.climate.copernicus.eu
-2. Add `~/.cdsapirc`:
+2. Accept dataset licence at the CDS dataset page before first download
+3. Add `~/.cdsapirc`:
    ```
    url: https://cds.climate.copernicus.eu/api
    key: YOUR-KEY-HERE
    ```
-3. Download targeted regional subsets — do not download global files
+4. Download targeted regional subsets — do not download global files
 
 ## ARCO-ERA5 (Pangeo Alternative)
 

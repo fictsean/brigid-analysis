@@ -22,9 +22,12 @@ Provenance log for all datasets used in this project. One entry per source.
 - **Coverage**: 1940–present; global; hourly at ~31km resolution
 - **Format**: NetCDF (.nc) — large files, gitignored
 - **Raw path**: `data/raw/era5/`
-- **Notes**: Primary observed climate dataset. Use `cdsapi` Python client. Requires free CDS account and API key in `~/.cdsapirc`.
+- **Citation**: Hersbach, H., Bell, B., Berrisford, P., et al. (2023): ERA5 monthly averaged data on single levels from 1940 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). DOI: 10.24381/cds.f17050d7
+- **License**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Contains modified Copernicus Climate Change Service information. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.
+- **Attribution requirement**: Credit Copernicus C3S/ECMWF and link to CC BY 4.0 in any publication or product using this data or derivatives.
+- **Notes**: Primary observed climate dataset. Use `cdsapi` Python client. API key in `~/.cdsapirc`. Downloaded subset: SE Australia monthly `maximum_2m_temperature`, Oct–Mar fire season months, 1961–2020.
 - **Wiki**: [[era5-reanalysis]]
-- **Status**: not yet downloaded
+- **Status**: downloaded — `data/raw/era5/era5_mx2t_se_australia_1961_2020.nc`
 
 ---
 
@@ -32,11 +35,14 @@ Provenance log for all datasets used in this project. One entry per source.
 - **Source**: Centre for Research on the Epidemiology of Disasters (CRED), UCLouvain
 - **URL**: https://www.emdat.be/
 - **Coverage**: 1900–present; global natural and technological disasters
-- **Format**: Excel / CSV (exported from web interface)
-- **Raw path**: `data/raw/emdat/`
-- **Notes**: Requires free academic registration. Key fields: disaster type, country, start/end date, total deaths, total damages (USD). Currency values are nominal; inflation-adjust before use.
-- **Wiki**: [[emdat]]
-- **Status**: not yet downloaded
+- **Format**: CSV (exported from query builder at emdat.be)
+- **Raw path**: `data/raw/emdat/` (gitignored — no redistribution per Data Use Agreement)
+- **Processed path**: `data/processed/emdat_disasters.parquet` (gitignored — same reason)
+- **License**: EM-DAT Data Use Agreement — non-commercial, no redistribution
+- **Citation**: EM-DAT: The Emergency Events Database — Université catholique de Louvain (UCL) — CRED, D. Guha-Sapir — www.emdat.be, Brussels, Belgium.
+- **Notes**: Damage values are nominal USD; CPI-adjusted to 2020 USD in ingest notebook using BLS CPI-U. Disaster Group = Natural filter applied. `'000 US$` fields multiplied by 1000.
+- **Wiki**: [[datasets/emdat]]
+- **Status**: not yet downloaded — register at emdat.be to obtain
 
 ---
 

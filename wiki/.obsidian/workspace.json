@@ -11,10 +11,10 @@
             "id": "da3bf52ecc4c8c60",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -176,8 +176,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "da3bf52ecc4c8c60",
+  "active": "9f57a5a89982b3fa",
   "lastOpenFiles": [
+    "methods/attribution-chain.md",
+    "methods/regional-amplification.md",
+    "findings/2026-05-24-observed-amplification.md",
+    "findings/2026-05-24-black-summer-pr-era5.md",
     "INDEX.md.tmp.83104.12d3e8b5955f",
     "findings/2026-05-24-black-summer-pr-cmip6.md",
     "findings/far-probability-ratio.md",

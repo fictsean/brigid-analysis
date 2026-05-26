@@ -226,6 +226,10 @@ data/raw/*
 *.hdf5
 *.zarr/
 
+# EM-DAT processed output excluded — Data Use Agreement prohibits redistribution
+data/processed/emdat_disasters.parquet
+
 # Outputs that regenerate from notebooks
 outputs/figures/*
 !outputs/figures/.gitkeep
+.cdsapirc
