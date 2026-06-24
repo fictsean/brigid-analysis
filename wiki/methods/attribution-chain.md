@@ -2,10 +2,10 @@
 type: method
 name: attribution-chain
 tags: [overview, attribution, liability, end-to-end]
-related: [emissions-to-forcing, far-probability-ratio, regional-amplification, carbon-majors-database, era5-reanalysis, cmip6, ekwurzel-2017]
+related: [emissions-to-forcing, far-probability-ratio, regional-amplification, carbon-majors-database, era5-reanalysis, cmip6, ekwurzel-2017, 2026-06-13-methodology-revision]
 status: active
 confidence: high
-last_updated: 2026-05-24
+last_updated: 2026-06-13
 ---
 
 # Attribution Chain — End-to-End Overview
@@ -13,6 +13,15 @@ last_updated: 2026-05-24
 This page describes the full methodology for calculating an entity's proportional liability for a
 specific climate disaster. It is the entry point before reading the individual method pages or
 notebooks. Terms in **bold** are defined on first use.
+
+> **Revised 2026-06-13** ([[2026-06-13-methodology-revision]]). The PR step now uses a nonstationary
+> GEV shift-fit (referenced to pre-industrial), and apportionment uses each entity's **global**
+> warming share. The code lives in `src/attribution/`; notebooks are thin callers.
+>
+> **Data fix 2026-06-17** ([[2026-06-17-lei-dropna-fix]]). The entity-year aggregation was silently
+> dropping ~562 GtCO₂e of null-LEI emitters (Former Soviet Union, China Coal, Chevron, NIOC…),
+> understating collective coverage as 44.6%. Corrected to **75.5%**. Black Summer central liability
+> is now **USD 3.92B** (was 2.31B under the bug; 5.08B before the 2026-06-13 revision).
 
 ## The Chain
 
@@ -91,8 +100,8 @@ percentile) rather than a single number.
 **Validation**: FaIR's median gives 1.04°C of warming for 2011–2020 against the IPCC AR6 best
 estimate of 1.07°C.
 
-**Key result**: Carbon Majors collectively responsible for ~45% of observed 1.18°C warming.
-Saudi Aramco: 44.7 m°C; ExxonMobil: 37.6 m°C (where m°C = millidegrees Celsius).
+**Key result**: Carbon Majors collectively responsible for ~76% of observed 1.18°C warming.
+Former Soviet Union: 92.8 m°C; China Coal: 72.0 m°C; Saudi Aramco: 44.7 m°C (where m°C = millidegrees Celsius).
 
 **Notebook**: `02-attribution/01_emissions_to_warming.ipynb`  
 **Output**: `data/processed/entity_warming_contribution.parquet`, `fair_global_temperature.parquet`  
@@ -112,28 +121,22 @@ The **regional amplification factor** (α, "alpha") captures this:
 ```
 
 α > 1 means the region warmed faster than the global average; α < 1 means it warmed more slowly.
-An α of 1.5 for a region means temperatures there rose 50% faster than the world average — so
-each degree of global warming produced 1.5°C of local warming.
 
-In our liability formula, entity warming shares are expressed as fractions of *regional* warming,
-and because both the entity and the total scale by the same α, it cancels in the ratio. In
-practice, **entity warming shares are used directly** in the liability formula without needing to
-separately apply α. However, α matters indirectly: the climate models used for the counterfactual
-(Step 4 below) should correctly represent how the region warms. If they over- or under-estimate α,
-the counterfactual is biased.
+α enters the chain as the **shift coefficient β** in the Step-4 PR computation: it sets how far the
+observed record is rescaled between the factual and pre-industrial climates. A larger β produces a
+larger shift and a higher PR — a *nonlinear* dependence. α does **not** multiply into the final
+liability, which uses each entity's global warming share directly.
 
-**Current estimates for SE Australia (fire season)**:
+**Current estimates for SE Australia**:
 
 | Source | α | What was measured |
 |--------|---|-------------------|
-| CMIP6 models (ACCESS-CM2 + ACCESS-ESM1-5) | 0.935 | Model fire-season daily-max temperature vs model global mean |
-| ERA5 observed | 0.726 | Observed fire-season daily-max temperature vs modelled global mean (FaIR) |
+| ERA5 observed (**primary β**) | 0.726 | Observed *fire-season* daily-max temperature vs FaIR GMST, 1961–2020 |
+| CMIP6 models (ACCESS-CM2 + ACCESS-ESM1-5) | 0.935 | Model *annual-mean* tas vs model global mean, 1901–2014 |
 
-Both values are below 1.0, meaning SE Australia's fire-season temperatures warmed slightly slower
-than the global average over this period and metric. Note that BoM (Australian Bureau of Meteorology)
-reports annual mean temperatures in SE Australia warming ~1.3–1.5× faster than the global average
-since 1910 — that's a different metric (annual mean since 1910 vs fire-season daily maximum since
-1961), which is why the numbers differ.
+The two are **different metrics** (fire-season mx2t vs annual-mean tas) and are not directly
+comparable; the ERA5 fire-season value is used as primary. BoM reports SE Australian annual-mean
+warming ~1.3–1.5× global since 1910 — a third, different metric.
 
 **Notebooks**: `02-attribution/02_australia_regional_amplification.ipynb`,
 `02-attribution/05_observed_amplification.ipynb`  
@@ -178,35 +181,31 @@ temperature recorded over a 24-hour window at each grid point. This is equivalen
 climate model variable called **tasmax** (daily maximum near-surface air temperature). We compute
 the fire-season (October–March) anomaly for SE Australia.
 
-### Counterfactual distribution (P0)
+### Counterfactual distribution (P0) — nonstationary GEV shift-fit
 
-We use **CMIP6 hist-nat** runs. CMIP6 (Coupled Model Intercomparison Project Phase 6) is the
-coordinated global effort to run climate models under standardised conditions. The **hist-nat**
-(historical natural-only) experiment runs the same models as the standard historical simulation
-but removes all human-caused forcing (no fossil fuel CO₂, no land-use change, no aerosols) —
-only natural factors like volcanic eruptions and changes in solar output are included. This
-is our best estimate of what the climate would have looked like without human influence.
+We build P0 from the **same observed ERA5 pool**, rescaled to a pre-industrial climate using a
+smoothed FaIR GMST covariate (the WWA "shift-fit"). Each season is shifted by β·ΔG — additively
+for temperature, multiplicatively (Clausius-Clapeyron) for precipitation — where the counterfactual
+GMST is 0 vs 1850–1900, so the shift removes *all* anthropogenic warming. A **GEV** (the natural
+distribution for seasonal block maxima) is fitted to the factual pool; P0 is read from the same fit
+at the threshold mapped to the counterfactual climate. A 2,000× bootstrap (resampling seasons +
+sampling FaIR event-year GMST uncertainty) gives the range.
 
-We fit a statistical distribution (Gaussian) to both P1 and P0, compute PR at the observed event
-severity, and repeat 2,000 times with bootstrapped samples to get an uncertainty range.
+This replaces the earlier Gaussian "ERA5 + CMIP6 hist-nat" / "detrended ERA5" approaches, which
+mixed climatological baselines and evaluated Gaussian tails near the record maximum
+([[2026-06-13-methodology-revision]]). No CMIP6 streaming is required for the PR.
 
-**Why ERA5 for P1 (not a climate model)**: Climate models can have biases in how they represent
-regional warming. Using ERA5 for P1 means the factual climate is the actual observed record, not
-a model's version of it. This is the standard approach used by the World Weather Attribution
-(WWA) group.
+**Why ERA5 for the pool**: the factual climate is the observed record, not a model's version of it
+— the standard WWA choice.
 
-**Why not use WWA's published results directly**: WWA publishes attribution studies for major
-events, but only ~50 events have been studied, and coverage is uneven. Computing our own ERA5
-+ hist-nat PR keeps the pipeline traceable and scalable to any event.
-
-**Primary result for Black Summer**: PR = 1.80 [1.00–2.86] (bootstrap median and 5th–95th
-percentile range, 4-model corrected run). FAR = 44.4%. At the 99th percentile threshold,
-PR = 3.3. This is a conservative lower bound — the 4 available hist-nat models overestimate
-SE Australian natural variability. WWA (PR ≥ 4–9) is the better-constrained upper reference.
+**Primary result for Black Summer**: PR = 4.0 [2.4–15.4], FAR = 0.752 (shift coefficient β = 0.726).
+This sits exactly at the WWA FWI lower bound (PR ≥ 4). The data-driven fitted β (PR=18.7) is
+rejected as outlier-driven; CMIP6 hist-nat (notebook 03, PR=0.6) is a documented null result only.
 
 **Notebooks**: `02-attribution/04_black_summer_pr_era5.ipynb` (primary),
-`02-attribution/03_black_summer_pr_cmip6.ipynb` (null result — CMIP6 hist vs hist-nat gave PR=0.6)  
-**Output**: `data/processed/black_summer_pr_era5.csv`, `black_summer_pr_era5_bootstrap.parquet`  
+`02-attribution/03_black_summer_pr_cmip6.ipynb` (null result)  
+**Code**: `src/attribution/shift_fit.py`  
+**Output**: `data/processed/black_summer_pr_era5.csv`, `black_summer_pr_shiftfit_bootstrap.parquet`  
 **Wiki**: [[methods/far-probability-ratio]], [[findings/2026-05-24-black-summer-pr-era5]],
 [[datasets/wwa-studies]]
 
@@ -215,7 +214,9 @@ SE Australian natural variability. WWA (PR ≥ 4–9) is the better-constrained 
 ## Step 5 — FAR × Damages → Climate-Attributed Damages
 
 FAR is multiplied by a total damage estimate for the event. The interpretation: FAR% of the
-damages would not have occurred in a world without anthropogenic climate change.
+damages would not have occurred in a world without anthropogenic climate change. The same primary
+FAR is applied across damage scenarios — damages are a separate axis from PR, and a joint
+PR × damages grid (see the liability notebooks) shows the combined sensitivity.
 
 ```
 climate_attributed_damages = total_damages × FAR
@@ -240,27 +241,32 @@ Epidemiology of Disasters. EM-DAT registration is pending.
 
 ## Step 6 — Entity Warming Share × FAR × Damages → Liability
 
-The final step combines the entity's global warming share (Step 2), the FAR (Step 4), and the
+The final step combines the entity's **global** warming share (Step 2), the FAR (Step 4), and the
 total damage estimate (Step 5).
 
 ```
-entity_liability_USD = entity_warming_share × FAR × total_damages_USD
+entity_liability_USD = entity_global_warming_share × FAR × total_damages_USD
 ```
 
-The proportionality assumption: if entity X caused W% of global warming, they caused W% of the
-regional climate change signal, and therefore W% of the climate-attributed fraction of damages.
-This is a physical-science proportionality claim, not a legal ruling.
+The proportionality assumption: if entity X caused W% of *global* warming, they caused W% of the
+climate-attributed fraction of damages. The named Carbon Majors collectively cover ~75% of global
+fossil CO₂, so they absorb ~75% of the climate-attributed damages — the share is **not** normalised
+within the group. This is a physical-science proportionality claim, not a legal ruling.
 
-**Primary result (Black Summer, central scenario)**:
+**Primary result (Black Summer, central scenario, PR=4.0 / FAR=0.752, AUD 10B damages)**:
 
-| Entity | Type | USD M |
-|--------|------|-------|
-| Saudi Aramco | State-owned | 261 |
-| ExxonMobil | Investor-owned | 219 |
-| Gazprom | State-owned | 192 |
-| BP | Investor-owned | 167 |
-| Shell | Investor-owned | 159 |
-| **Total Carbon Majors** | | **3,067** |
+| Entity | Type | USD M [5–95%] |
+|--------|------|---------------|
+| Former Soviet Union (1900–1991) | Nation State | 408 [319–507] |
+| China (Coal, 1945–2004) | Nation State | 317 [248–394] |
+| Saudi Aramco | State-owned | 197 [154–244] |
+| Chevron | Investor-owned | 182 [142–226] |
+| ExxonMobil | Investor-owned | 165 [130–206] |
+| Gazprom | State-owned | 145 [113–180] |
+| **Total Carbon Majors** | | **3,920** |
+
+Uncertainty is the PR 5–95% bootstrap range. (The FaIR ensemble cancels in the warming *share*, so
+it contributes no liability spread.)
 
 **Notebook**: `03-liability/01_black_summer_liability.ipynb`  
 **Output**: `data/processed/black_summer_liability.parquet`  
@@ -272,16 +278,17 @@ This is a physical-science proportionality claim, not a legal ruling.
 
 Each step contributes uncertainty. Listed from largest to smallest contribution:
 
-1. **Damage accounting** (~120× range): insured vs direct economic vs total social cost.
+1. **Damage accounting** (~44× range): insured vs direct economic vs total social cost.
    The choice of damage framework matters far more than any attribution uncertainty.
-2. **PR / FAR** (~3× within defensible ERA5 range): driven by limited hist-nat model availability
-   and natural variability in the observed record. Comparing ERA5 median (1.80) to ERA5 99th-pct
-   (3.3) to WWA (≥4–9) spans the current scientifically defensible range.
-3. **Scope 3 inclusion** (~9× impact on per-entity figures): if courts exclude product combustion,
-   entity liability shrinks approximately 9×.
-4. **Entity warming share** (<2× from p05 to p95): FaIR ensemble uncertainty is relatively small.
-5. **Regional amplification** (~20% effect): the difference between CMIP6 α (0.935) and ERA5 α
-   (0.726) shifts the obs-corrected central liability from 3.07B to 1.96B.
+2. **Scope 3 inclusion** (large per-entity impact): if courts exclude product combustion,
+   per-entity liability shrinks substantially (scope-1 sensitivity in notebook 01-exploration/01).
+3. **PR / FAR** (~1.6× across the bootstrap; ~larger across β choices): the FAR 5–95% bootstrap
+   spans 0.59–0.93 for Black Summer; the choice of shift coefficient β (0.726 vs 0.935) moves PR
+   from 4.0 to 5.2.
+4. **Regional amplification (β)**: enters only through the PR via β (item 3), not as a separate
+   liability multiplier.
+5. **Entity warming share**: the FaIR ensemble cancels in the warming *share* (it is a ratio), so
+   it contributes **no** liability uncertainty — liability spread comes entirely from PR and damages.
 
 ---
 
@@ -294,7 +301,7 @@ Each step contributes uncertainty. Listed from largest to smallest contribution:
   in the climate attribution literature.
 - **Physical ≠ legal**: these are risk-proportional estimates. Legal causation doctrines (but-for
   causation, substantial factor tests, market share liability) require separate analysis.
-- **Carbon Majors coverage**: ~45% of total global fossil CO₂. Total climate-attributed damages
+- **Carbon Majors coverage**: ~75% of total global fossil CO₂. Total climate-attributed damages
   are larger than the Carbon Majors share computed here.
 
 ---

@@ -30,7 +30,7 @@ This paper is the direct methodological ancestor of our emissions-to-warming ste
 2. Use the 2026 Carbon Majors release (178 entities, updated to 2024)
 3. Propagate uncertainty through an 841-member posterior ensemble rather than a single model run
 
-Our top-line finding (Saudi Aramco 44.7 m°C, Carbon Majors ~45% of observed warming) is consistent with Ekwurzel et al. scaled for the updated dataset and time period.
+Our top-line finding (Saudi Aramco 44.7 m°C; Carbon Majors ~76% of observed warming, close to the ~71% Heede coverage figure) is consistent with Ekwurzel et al. scaled for the updated dataset and time period.
 
 ## Legal Significance
 

@@ -2,10 +2,10 @@
 type: disaster
 name: black-summer-2019-20
 tags: [bushfire, australia, heat, fire-weather, 2019, 2020]
-related: [wwa-studies, far-probability-ratio, 2026-05-18-black-summer-liability, 2026-05-23-australia-regional-amplification, era5-reanalysis, cmip6]
+related: [wwa-studies, far-probability-ratio, findings/2026-05-18-black-summer-liability, findings/2026-05-23-australia-regional-amplification, findings/2026-05-24-black-summer-pr-era5, findings/2026-05-24-observed-amplification, era5-reanalysis, cmip6]
 status: active
 confidence: medium
-last_updated: 2026-05-23
+last_updated: 2026-05-28
 ---
 
 # Black Summer 2019–20 (Australian Bushfires)
@@ -29,7 +29,23 @@ last_updated: 2026-05-23
 | Fire Weather Index (FWI) | ≥4 | ≥0.75 |
 | Monthly Severity Rating (MSR) | ≥9 | ≥0.89 |
 
-### CMIP6 Independent Verification
+### Nonstationary GEV Shift-Fit (Primary)
+**Source**: `notebooks/02-attribution/04_black_summer_pr_era5.ipynb`; `src/attribution/shift_fit.py`
+
+The observed ERA5 pool is rescaled to the pre-industrial climate via a smoothed FaIR GMST covariate
+(shift coefficient β = α_ERA5 = 0.726), with a GEV fitted to the fire-season block maxima. See
+[[2026-06-13-methodology-revision]] for why this replaced the earlier detrended-Gaussian approach.
+
+| Method | PR | FAR | Notes |
+|--------|-----|-----|-------|
+| **GEV shift-fit, β=0.726 (ERA5)** | **4.0 [2.4–15.4]** | **0.752** | **Primary estimate** |
+| GEV shift-fit, β=0.935 (CMIP6 tas) | 5.2 [2.9–24] | 0.806 | Sensitivity |
+| WWA FWI lower bound | ≥4 | ≥0.75 | Validation reference |
+| WWA MSR central | ≥9 | ≥0.89 | Validation reference |
+
+The primary PR sits exactly at the WWA FWI lower bound. See [[findings/2026-05-24-black-summer-pr-era5]].
+
+### CMIP6 Independent Verification (Null Result)
 Computed in `notebooks/02-attribution/03_black_summer_pr_cmip6.ipynb` using `tasmax` Oct–Mar seasonal maxima from 4 CMIP6 models (19 member-runs). **Null result**: CMIP6 PR = 0.6, opposite of physical expectation. The available models do not reproduce the Australian warming signal — consistent with the amplification underestimation found in [[findings/2026-05-23-australia-regional-amplification]]. WWA PR values are authoritative.
 
 See [[findings/2026-05-24-black-summer-pr-cmip6]] for full analysis.
@@ -46,9 +62,13 @@ See [[findings/2026-05-24-black-summer-pr-cmip6]] for full analysis.
 
 See [[findings/2026-05-18-black-summer-liability]] for full entity-level breakdown.
 
-Central scenario (AUD 10B direct damages, PR=9): total Carbon Majors attributed liability = **USD 6.1B**, with Saudi Aramco (USD 521M) and ExxonMobil (USD 439M) as top entities.
+Central scenario (AUD 10B direct damages, FAR=0.752): total Carbon Majors attributed liability =
+**USD 3.92B** (primary, PR=4.0). Top entity Former Soviet Union USD 408M, then China Coal USD 317M;
+Saudi Aramco USD 196M [154–244] (incumbents unchanged by the 2026-06-17 LEI fix). Carbon Majors cover
+~75% of global fossil CO₂, so this is that fraction of climate-attributed damages.
 
-Regional warming shares for SE Australia incorporate a CMIP6-derived amplification factor of 0.935 (ensemble median). Using the BoM-observed amplification (~1.35) would increase estimates by ~45%. See [[findings/2026-05-23-australia-regional-amplification]].
+The regional amplification (α=0.726, ERA5 fire-season) enters as the shift coefficient β in the PR,
+not as a liability multiplier — see [[regional-amplification]] and [[2026-06-13-methodology-revision]].
 
 ## Litigation Context
 

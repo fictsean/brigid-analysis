@@ -1,18 +1,22 @@
 ---
 type: method
 name: regional-amplification
-tags: [amplification, regional, cmip6, era5, australia, fire-season]
-related: [far-probability-ratio, emissions-to-forcing, 2026-05-23-australia-regional-amplification, 2026-05-24-observed-amplification, era5-reanalysis, cmip6]
+tags: [amplification, regional, cmip6, era5, australia, fire-season, queensland, floods]
+related: [far-probability-ratio, emissions-to-forcing, findings/2026-05-23-australia-regional-amplification, findings/2026-05-24-observed-amplification, findings/2026-05-26-qld-floods-regional-amplification, era5-reanalysis, cmip6, 2026-06-13-methodology-revision]
 status: active
 confidence: medium
-last_updated: 2026-05-24
+last_updated: 2026-06-13
 ---
 
 # Regional Amplification
 
 The step between **global warming attribution** and **regional event risk** in the liability chain.
-Entity warming shares are computed globally via FaIR (see [[methods/emissions-to-forcing]]). To
-apply those shares to a regional event, we need to know how local warming relates to global warming.
+Entity warming shares are computed globally via FaIR (see [[methods/emissions-to-forcing]]). The
+amplification factor α relates local to global warming, and **enters the pipeline as the shift
+coefficient β in the GEV shift-fit** (see [[far-probability-ratio]]) — it does *not* multiply into
+the final liability, which uses each entity's global warming share directly
+([[2026-06-13-methodology-revision]]). The `warming_au_*` / `warming_qld_*` columns written by
+notebooks 02/06 are diagnostic only.
 
 ## The Problem
 
@@ -34,13 +38,16 @@ Two independent approaches have been applied to SE Australia for the Black Summe
 
 ### CMIP6 Historical (notebook 02)
 
-Use CMIP6 historical runs to compare SE Australian tasmax trend to global GMST trend. This gives
+Use CMIP6 historical runs to compare SE Australian warming to global GMST trend. This gives
 a model-based estimate of how much the models predict the region will amplify global warming.
 
 - Models: ACCESS-CM2, ACCESS-ESM1-5
-- Metric: fire-season (Oct–Mar) tasmax, area-weighted over SE AU (28–44°S, 138–154°E)
-- Period: full historical run (~1850–2014)
+- Metric: **annual-mean `tas`** (not fire-season tasmax), area-weighted over SE AU (28–44°S, 138–154°E)
+- Period: 1901–2014
 - Result: ensemble median **α = 0.935** (ACCESS-CM2 = 1.030, ACCESS-ESM1-5 = 0.841)
+
+> The CMIP6 value is an **annual-mean** metric and is not directly comparable to the ERA5
+> fire-season value below — this is why the ERA5 fire-season amplification is used as the primary β.
 
 ### ERA5 Observed (notebook 05)
 
@@ -52,23 +59,39 @@ FaIR GMST trend over the same period.
 - Both: linear regression trends, ratio = α
 - Result: **α = 0.726** (SE AU trend +0.14°C/dec; global trend +0.20°C/dec)
 
-## Current Values
+## Current Values — SE Australia (Black Summer)
 
 | Source | α | Metric | Period |
 |--------|---|--------|--------|
-| ACCESS-CM2 (CMIP6) | 1.030 | tasmax fire season / GMST | historical |
-| ACCESS-ESM1-5 (CMIP6) | 0.841 | tasmax fire season / GMST | historical |
-| **CMIP6 ensemble median** | **0.935** | tasmax fire season / GMST | historical |
-| **ERA5 observed** | **0.726** | mx2t fire season / FaIR GMST | 1961–2020 |
+| ACCESS-CM2 (CMIP6) | 1.030 | annual-mean tas / GMST | 1901–2014 |
+| ACCESS-ESM1-5 (CMIP6) | 0.841 | annual-mean tas / GMST | 1901–2014 |
+| CMIP6 ensemble median | 0.935 | annual-mean tas / GMST | 1901–2014 |
+| **ERA5 observed (PRIMARY β)** | **0.726** | mx2t fire season / FaIR GMST | 1961–2020 |
+
+## Current Values — SE Queensland (QLD Floods 2022)
+
+Region: lat −30° to −24°S, lon 150° to 154°E. Season: wet season (Nov–Apr).
+
+| Source | α | Metric | Period |
+|--------|---|--------|--------|
+| ACCESS-CM2 (CMIP6) | 0.364 | annual-mean tas / GMST | 1901–2014 |
+| ACCESS-ESM1-5 (CMIP6) | 1.401 | annual-mean tas / GMST | 1901–2014 |
+| CMIP6 ensemble median | 0.882 | annual-mean tas / GMST | 1901–2014 (only 2 models — p05/p95 are interpolation between two points, not a sampling range) |
+| **ERA5 observed (PRIMARY β)** | **0.289** | mx2t wet season / FaIR GMST | 1961–2020 |
+
+The ERA5 observed QLD value (0.289) is very low — wet-season land Tmax shows a weak trend in SE QLD
+due to ENSO-driven variability and cloud cover feedback. Precipitation extremes respond more to
+Coral/Tasman Sea SST than to land Tmax, so 0.289 understates the true warming forcing on QLD
+flood extremes. See [[findings/2026-05-26-qld-floods-regional-amplification]].
 
 ## Which Value to Use
 
-The **CMIP6 ensemble median (0.935) is used in the primary liability calculation**. It is the
-value embedded in the `entity_warming_contribution.parquet` `warming_au_*` columns.
+**SE Australia (Black Summer)**: The GEV shift-fit uses **β = α = 0.726** (ERA5 fire-season,
+additive) as primary → PR = 4.0. CMIP6 α = 0.935 is a sensitivity (PR = 5.2).
 
-The ERA5 observed value (0.726) is applied as an **obs-constrained sensitivity scenario**
-(`liability_obs_*` columns in `black_summer_liability.parquet`). Because it is lower than the CMIP6
-value, it produces a downward correction (obs-corrected central liability = USD 1.96B vs 3.07B).
+**SE QLD (2022 Floods)**: The multiplicative shift-fit uses **β = ln(1+CC)·α** with **α = 0.289**
+(ERA5 wet-season, conservative) as primary → PR = 1.11. CMIP6 α = 0.882 is a sensitivity (PR = 1.39).
+See [[findings/2026-05-26-qld-floods-pr-era5]].
 
 ## Why the Two Values Differ
 
@@ -94,22 +117,20 @@ This is a real methodological uncertainty, not an error in either approach.
 
 ## How It Propagates Into Liability
 
-```
-entity_warming_au = entity_warming_global × α
+α enters the chain in **one** place — as the shift coefficient β in the PR computation
+([[far-probability-ratio]]). A larger β produces a larger counterfactual shift and hence a higher
+PR/FAR. This is a nonlinear dependence; α does **not** scale the liability linearly.
 
-liability_USD_M = entity_warming_au / total_warming_au × FAR × total_damages_USD_M
-```
-
-Equivalently (since total_warming_au = total_warming_global × α and the α cancels in the ratio):
+The final liability uses each entity's **global** warming share directly:
 
 ```
-liability_USD_M = entity_warming_share × FAR × total_damages_USD_M
+liability_USD = entity_global_warming_share × FAR(β) × total_damages
 ```
 
-The amplification factor only matters when comparing the **absolute warming contribution** of
-an entity to a regional total — it cancels when expressed as a *share* of the regional warming,
-which is the form used in the liability formula. The α term directly enters the PR correction
-pathway instead (see [[methods/far-probability-ratio]]).
+α would cancel if it were applied uniformly to both the entity and the regional total as a *share*,
+which is why the per-region `warming_au_*` / `warming_qld_*` columns (notebooks 02/06) are retained
+as diagnostics only and are **not** part of the liability calculation. (A previous version
+incorrectly multiplied PR by an amplification *ratio* — see [[2026-06-13-methodology-revision]].)
 
 ## Caveats
 

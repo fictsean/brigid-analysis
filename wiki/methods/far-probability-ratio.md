@@ -1,134 +1,112 @@
 ---
 type: method
 name: far-probability-ratio
-tags: [attribution, statistics, extreme-events, cmip6, gaussian, bootstrap]
-related: [cmip6, era5-reanalysis, wwa-studies, 2026-05-18-black-summer-liability]
+tags: [attribution, statistics, extreme-events, gev, shift-fit, bootstrap, precipitation, clausius-clapeyron]
+related: [cmip6, era5-reanalysis, wwa-studies, findings/2026-05-18-black-summer-liability, findings/2026-05-26-qld-floods-pr-era5, findings/2026-05-26-qld-floods-liability, 2026-06-13-methodology-revision]
 status: active
 confidence: high
-last_updated: 2026-05-26
+last_updated: 2026-06-13
 ---
 
 # Fraction of Attributable Risk (FAR) and Probability Ratio (PR)
 
-The two core metrics used in probabilistic extreme event attribution. Both compare the probability of an event in the factual (observed) climate against a counterfactual climate without anthropogenic forcing.
+The two core metrics in probabilistic extreme event attribution. Both compare the probability of an
+event in the factual (observed) climate against a counterfactual climate without anthropogenic forcing.
 
 ## Definitions
 
-**Probability Ratio (PR):**
-```
-PR = P1 / P0
-```
-Where P1 is the probability of the event in the factual climate and P0 in the counterfactual. PR = 2 means the event is twice as likely due to climate change.
+**Probability Ratio**: `PR = P1 / P0` — P1 in the factual climate, P0 in the counterfactual.
+PR = 2 means the event is twice as likely due to climate change.
 
-**Fraction of Attributable Risk (FAR):**
-```
-FAR = 1 - (P0 / P1) = 1 - (1 / PR)
-```
-FAR is the fraction of the event's risk attributable to climate change. FAR = 0.5 means 50% of the event's risk is attributable.
+**Fraction of Attributable Risk**: `FAR = 1 − P0/P1 = 1 − 1/PR`. FAR = 0.5 means 50% of the event's
+risk is attributable.
 
-## How P0 and P1 Are Estimated
+## Method — Nonstationary GEV Shift-Fit (primary, both events)
 
-1. **Define the event**: characterize in terms of a threshold exceedance (e.g., Oct–Mar seasonal max tasmax > Xth percentile)
-2. **Factual distribution (P1)**: fit a distribution to ERA5 observed daily maximum temperature — the actual observed record, not a model simulation
-3. **Counterfactual distribution (P0)**: fit distribution to CMIP6 `hist-nat` (natural forcing only) runs, r1i1p1f1 only to avoid ensemble imbalance
-4. **Compute PR/FAR** with bootstrap uncertainty quantification
+> Revised 2026-06-13 ([[2026-06-13-methodology-revision]]). This replaces the earlier
+> Gaussian/log-normal "ERA5 + CMIP6 hist-nat" and "detrended ERA5" approaches, which (a) mixed
+> climatological baselines — the counterfactual removed only post-1961 warming, not warming since
+> pre-industrial — and (b) evaluated parametric tails near the record maximum. The shift-fit is the
+> standard WWA approach.
 
-## ERA5 + CMIP6 hist-nat Implementation (Primary — Black Summer)
+Implemented in `src/attribution/shift_fit.py` (`shift_fit_gev`), called by notebooks 04 and 07.
 
-Notebook: `notebooks/02-attribution/04_black_summer_pr_era5.ipynb`
+1. **Build one observed pool** of seasonal block maxima from ERA5 (no CMIP6 needed).
+2. **Covariate**: smoothed FaIR GMST anomaly vs 1850–1900. The pre-industrial counterfactual
+   covariate is therefore exactly **0**, so the shift removes *all* anthropogenic warming.
+3. **Rescale** every season to a common climate using a shift coefficient β (the regional warming
+   response):
+   - **Additive** (temperature): x → x + β·(g_target − g_year), β in °C local per °C global.
+   - **Multiplicative** (precipitation): x → x·exp(β·(g_target − g_year)), β = d(log x)/dg =
+     ln(1+CC_rate)·α (C-C scaling × regional amplification).
+4. **Fit a GEV** to the factual pool (shape ξ constrained to [−0.4, 0.4], WWA practice). Evaluate
+   P1 at the observed event magnitude and P0 at the threshold mapped forward to the counterfactual
+   climate.
+5. **Bootstrap** (2,000×) resamples the season pool and jointly samples the FaIR event-year GMST
+   uncertainty; β is refit each iteration when data-driven. `np.percentile` handles `inf` PR
+   draws naturally (p95 is only inf if >5% of draws are essentially impossible counterfactuals).
 
-**P1 variable**: ERA5 `maximum_2m_temperature` (mx2t) at 06:00 UTC daily — 24-hour max covering the Australian afternoon peak. Monthly mean of daily max → Oct–Mar seasonal max anomaly.  
-**P0 variable**: CMIP6 `tasmax` from `hist-nat` (r1i1p1f1 only), same pipeline applied.  
-**Both P1 and P0 use the same metric**: monthly mean of daily maximum temperature — matches CMIP6 `tasmax` definition exactly.  
-**Region**: SE Australia, lat −44° to −28°S, lon 138° to 154°E  
-**Climatology baseline**: 1961–1990  
-**Distribution**: Gaussian fit; uncertainty via 2,000-iteration bootstrap  
-**Thresholds**: 90th, 95th, 97th, 99th percentile of the ERA5 P1 distribution; primary threshold = 2019 observed event anomaly  
+**Why a GEV**: seasonal block maxima are extreme-value data; Gaussian/log-normal tails badly
+mis-state exceedance probabilities exactly where the event sits. **Why ERA5 for the pool**: the
+factual climate is the observed record, not a model's version of it.
 
-**Why ERA5 for P1 (not CMIP6 historical)**: ERA5 is the observed record. Using CMIP6 historical for P1 embeds any model bias into the factual distribution, suppressing or inflating the PR signal depending on how the model handles regional warming. The standard WWA approach uses ERA5 for P1 for exactly this reason. See [[findings/2026-05-24-black-summer-pr-cmip6]] and [[methods/regional-amplification]] for the amplification context.
+## Results
 
-## Detrended ERA5 Implementation (Alternative P0)
+### Black Summer 2019–20 (additive, mx2t)
 
-Notebook: `notebooks/02-attribution/04_black_summer_pr_era5.ipynb` (Section 8)
+| β (shift coefficient) | Source | PR | FAR | Role |
+|-----------------------|--------|-----|-----|------|
+| **0.726** | ERA5 fire-season amplification | **4.0 [2.4–15.4]** | **0.752** | **Primary** |
+| 0.935 | CMIP6 annual-tas amplification | 5.2 [2.9–24] | 0.806 | Sensitivity |
+| fitted (1.40) | data-driven OLS | 18.7 [5.5–154] | 0.947 | Rejected (outlier-driven, unstable) |
+| — | WWA FWI (van Oldenborgh 2021) | ≥4 | ≥0.75 | Peer-reviewed validation |
+| — | WWA heat-MSR | ≥9 | ≥0.89 | Peer-reviewed validation |
 
-Constructs P0 by shifting the ERA5 anomaly pool backwards by the estimated anthropogenic regional
-warming signal Δ, rather than using CMIP6 hist-nat runs. This eliminates the model-variability
-mismatch: CMIP6 hist-nat has slightly wider σ than ERA5, which suppresses PR. In this approach
-P0 and P1 have identical σ, differing only by Δ.
+The primary (PR=4.0) sits exactly at the WWA FWI lower bound.
 
-```
-Δ = (FaIR GMST₂₀₁₉ − mean FaIR GMST₁₉₆₁₋₁₉₉₀) × α_ERA5
-  = 0.949°C × 0.726 = 0.689°C  [0.515–0.895 from FaIR p05–p95]
-P0 pool = P1 pool − Δ
-```
+### 2022 SE QLD Floods (multiplicative, precip 7-day max)
 
-Bootstrap propagates ERA5 sampling uncertainty and FaIR shift uncertainty jointly.
+| β = ln(1+CC)·α | Source | PR | FAR | Role |
+|----------------|--------|-----|-----|------|
+| **0.0195** (7% × 0.289) | ERA5 wet-season amplification | **1.11 [1.05–1.30]** | **0.101** | **Primary — lower bound** |
+| 0.0597 (7% × 0.882) | CMIP6 amplification | 1.39 [1.17–2.26] | 0.278 | Sensitivity |
+| 0.0378 (14% × 0.289) | dynamic C-C | 1.23 [1.12–1.67] | 0.189 | Upper C-C sensitivity |
+| 0.283 | data-driven fit | 4.78 | 0.791 | Rejected (ENSO-contaminated) |
 
-**Result (Black Summer)**: PR = 3.8 [2.4–7.4], FAR = 73.6%, CM liability USD 5.1B. This is a
-better central estimate than the CMIP6 hist-nat approach — it corrects for the model variability
-bias while remaining consistent with the lower end of WWA (≥4). See [[findings/2026-05-24-black-summer-pr-era5]].
-
-## CMIP6 hist vs hist-nat Implementation (Null Result — for reference)
-
-Notebook: `notebooks/02-attribution/03_black_summer_pr_cmip6.ipynb`
-
-Attempted hist vs hist-nat PR using CMIP6 tasmax. Failed: PR=0.6 [0.5–0.7]. Root causes: non-representative model subset, IPSL-CM6A-LR ensemble imbalance, CMIP6 historical underestimates Australian warming. See [[findings/2026-05-24-black-summer-pr-cmip6]].
+No WWA study exists for this event; PR=1.11 is the only quantitative estimate, and a conservative one.
 
 ## Liability Application
 
-FAR translates directly to the fraction of event damages attributable to anthropogenic climate change:
-
-```
-Climate-attributed damages = Total damages × FAR
-```
-
-The entity-level liability fraction then apportions that climate-attributed share across emitters using their warming contribution — see [[methods/emissions-to-forcing]].
-
-In practice:
 ```python
-liability_USD_M = entity_warming_share × far(pr) × total_damages_USD_M
+liability_USD = entity_global_warming_share × far(pr) × total_damages
 ```
 
-## PR Sources — Black Summer 2019–20
+FAR is the fraction of event damages attributable to anthropogenic climate change. The entity's
+**global** warming share (not its share of the Carbon Majors subtotal) apportions that across
+emitters — see [[emissions-to-forcing]] and [[2026-06-13-methodology-revision]].
 
-| Source | PR | FAR | Role |
-|--------|-----|-----|------|
-| ERA5 + hist-nat (bootstrap median) | 1.80 [1.00–2.86] | 44.4% | Conservative lower bound — model variability bias suppresses PR |
-| ERA5 + hist-nat (99th pct threshold) | 3.3 | 69.5% | — |
-| **ERA5 detrended (bootstrap median)** | **3.8 [2.4–7.4]** | **73.6%** | **Better central estimate — corrects model variability bias** |
-| WWA (van Oldenborgh 2021) FWI | ≥4 | ≥75% | Validation reference — peer-reviewed |
-| WWA (van Oldenborgh 2021) MSR | ≥9 | ≥89% | Validation reference — peer-reviewed |
-| CMIP6 hist vs hist-nat | 0.6 [0.5–0.7] | −0.66 | **Null result** — do not use |
+## CMIP6 hist-nat (null result — reference only)
 
-The **detrended ERA5 approach (PR=3.8)** is the better central estimate. It corrects the CMIP6
-hist-nat model-variability bias while remaining fully traceable and reproducible. Its bootstrap
-range [2.4–7.4] is consistent with the WWA FWI lower bound (PR ≥ 4).
-
-The **CMIP6 hist-nat run (PR=1.8)** is a conservative floor — defensible but understated because the
-4 available models overestimate SE Australian natural variability.
-
-WWA values serve as **validation reference** and upper bound. WWA uses models selected for Australian
-skill; our approach uses whatever hist-nat runs are on pangeo.
-
-For events without a WWA study, ERA5+hist-nat is the only available approach. For events with one, WWA confirms our estimates are in the right range.
+`notebooks/02-attribution/03_black_summer_pr_cmip6.ipynb` attempted hist vs hist-nat directly and
+gave PR=0.6 (non-representative model subset, ensemble imbalance, CMIP6 underestimates AU warming).
+Retained as a documented null result, not used for liability. The QLD hist-nat comparison was
+similarly dropped — it lacked the quantile/bias correction needed to compare ERA5 and CMIP6
+precipitation thresholds. See [[findings/2026-05-24-black-summer-pr-cmip6]].
 
 ## Caveats
 
-- Results depend on event definition and threshold choice
-- Multi-model spread is structural uncertainty; bootstrap captures sampling uncertainty within that spread
-- Regional amplification is metric-dependent: CMIP6 models give SE AU fire-season amplification of 0.935 (relative to global mean); ERA5 observed fire-season mean mx2t gives 0.726. Neither is simply "right" — see [[methods/regional-amplification]]
-- FAR > 0 does not imply causation, only that probability was increased
+- A single parametric GEV per pool; distribution-form uncertainty is not bootstrapped.
+- Results depend on event definition, region, and the prescribed β.
+- FAR > 0 indicates an increase in probability, not deterministic causation.
 
 ## Key References
 
-- Philip et al. (2020) — WWA standard protocol
-- van Oldenborgh et al. (2021) — Black Summer attribution, *Nat. Hazards Earth Syst. Sci.*
-- Stott et al. (2016) — "Attribution of extreme weather and climate-related events"
+- Philip et al. (2020) — WWA standard protocol (shift-fit with covariate)
+- van Oldenborgh et al. (2021) — Black Summer attribution, *NHESS*
+- Stott et al. (2016) — attribution of extreme weather events
 
 ## Related
 
-- [[methods/emissions-to-forcing]] — upstream step: entity emissions → forcing contribution
+- [[emissions-to-forcing]] — upstream: entity emissions → global warming share
+- [[regional-amplification]] — source of the shift coefficient β
 - [[wwa-studies]] — pre-computed FAR/PR for specific events
-- [[cmip6]] — counterfactual model runs
-- [[2026-05-18-black-summer-liability]] — first application of FAR in liability chain
-- [[2026-05-23-australia-regional-amplification]] — regional amplification context for PR estimates

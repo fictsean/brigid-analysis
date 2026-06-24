@@ -18,18 +18,18 @@ PDF reports with supporting data.
 
 WWA studies are used as **validation references**, not as primary inputs to the liability pipeline.
 
-The primary PR source for all liability calculations is our own ERA5 + CMIP6 hist-nat computation
-(notebook `02-attribution/04_black_summer_pr_era5.ipynb`), which is fully traceable, reproducible,
-and scalable to events without a published WWA study.
+The primary PR source for all liability calculations is our own **nonstationary GEV shift-fit** of
+the observed ERA5 record (notebook `02-attribution/04_black_summer_pr_era5.ipynb`,
+`src/attribution/shift_fit.py`), which is fully traceable, reproducible, and scalable to events
+without a published WWA study.
 
 Where a WWA study exists for the same event:
 1. Compare our computed PR against WWA's published value
 2. Agreement confirms the pipeline is sound; divergence flags a methodological issue to investigate
 3. WWA is never used as a direct input to the liability formula
 
-For Black Summer 2019–20, our ERA5 bootstrap median (PR=1.8) is a conservative lower bound — the
-available hist-nat models overestimate SE Australian natural variability. WWA (PR ≥ 4–9) is the
-better-constrained upper reference. See [[findings/2026-05-24-black-summer-pr-era5]].
+For Black Summer 2019–20, our GEV shift-fit (primary β=0.726) gives PR=4.0 [2.4–15.4], FAR=0.752 —
+sitting **exactly at the WWA FWI lower bound** (PR ≥ 4). See [[findings/2026-05-24-black-summer-pr-era5]].
 
 ## Key Facts
 

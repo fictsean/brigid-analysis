@@ -11,10 +11,14 @@
             "id": "da3bf52ecc4c8c60",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "INDEX.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "INDEX"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "INDEX.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for INDEX"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "INDEX.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from INDEX"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "INDEX.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of INDEX"
             }
           }
         ]
@@ -176,8 +183,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "9f57a5a89982b3fa",
+  "active": "da3bf52ecc4c8c60",
   "lastOpenFiles": [
+    "CONTEXT.md",
+    "models.md",
+    "disasters/qld-floods-2022.md",
+    "findings/2026-05-26-qld-floods-liability.md",
+    "findings/2026-05-26-qld-floods-pr-era5.md",
+    "findings/2026-05-26-qld-floods-regional-amplification.md",
     "findings/2026-05-25-emdat-ingest.md",
     "methods/attribution-chain.md",
     "methods/regional-amplification.md",
@@ -192,7 +205,6 @@
     "findings/2026-05-18-black-summer-liability.md",
     "INDEX.md",
     "Welcome.md",
-    "CONTEXT.md",
     "findings/2026-05-15-carbon-majors-ingest.md",
     "2026-05-15.md",
     "datasets/carbon-majors-database.md",
@@ -200,9 +212,6 @@
     "methods/emissions-to-forcing.md",
     "methods/far-probability-ratio.md",
     "datasets/wwa-studies.md",
-    "datasets/cmip6.md",
-    "datasets/emdat.md",
-    "datasets/era5-reanalysis.md",
     "models",
     "concepts",
     "findings",

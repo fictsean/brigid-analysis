@@ -1,6 +1,6 @@
 ---
 type: context
-last_updated: 2026-05-23
+last_updated: 2026-05-28
 ---
 
 # Brigid Analysis — Project Context
@@ -36,23 +36,28 @@ Each step is quantified with 5–95th percentile uncertainty ranges. Physical at
 
 ## Current Research Phase
 
-**Phase 3 — Attribution Pipeline Refinement** (active)
+**Phase 4 — Multi-Event Pipeline** (active)
 
-End-to-end liability pipeline proven on Black Summer 2019–20 (central result: USD 6.1B Carbon Majors liability). Now tightening the global→regional warming link and replacing borrowed WWA PR values with independently computed CMIP6 estimates.
+End-to-end attribution pipeline proven on two events. A WWA-style **nonstationary GEV shift-fit**
+(`src/attribution/shift_fit.py`) is the primary PR method across both events; liability is apportioned
+by each entity's **global** warming share. See [[findings/2026-06-13-methodology-revision]] for the
+methodology revision that established both.
 
 Completed:
 - Full Carbon Majors ingestion (1,435 GtCO₂e, 178 entities, 1854–2024)
 - FaIR v2.2 emissions-to-warming attribution (841-config AR6 posterior ensemble)
-- SE Australia regional amplification from CMIP6 historical (ensemble median 0.935; models underestimate observed ~1.35 — estimates are conservative lower bounds)
-- End-to-end Black Summer liability pipeline (WWA-borrowed PR; three damage scenarios)
-
-In progress:
-- Independent PR computation from CMIP6 hist vs hist-nat tasmax (4 models, 19 member-runs, 2000-iteration bootstrap)
+- SE Australia regional amplification — CMIP6 annual-tas median 0.935; ERA5 fire-season 0.726 (primary β)
+- **Black Summer 2019–20**: GEV shift-fit PR=4.0 [2.4–15.4], FAR=0.752, central Carbon Majors liability USD 3.92B (matches WWA FWI lower bound)
+- CMIP6 hist vs hist-nat PR verification — null result (PR=0.6); retained as reference only
+- EM-DAT ingestion for programmatic damage lookup (17,849 records); Black Summer fragmented so hardcoded PBO/ICA scenarios remain primary
+- SE QLD regional amplification — CMIP6 annual-tas median 0.882; ERA5 wet-season Tmax 0.289 (primary β, conservative)
+- **2022 SE QLD Floods**: multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability USD 0.53B (AUD 10B placeholder damages)
 
 Pending:
-- EM-DAT ingestion for multi-event scaling
-- ERA5 regional trend verification
-- Web API layer
+- Verify AUD 10B central damage estimate for QLD floods (QLD Treasury / Deloitte / NEMA)
+- Add third event to test pipeline generalisability (src/attribution is reusable)
+- Quantify GEV distribution-form uncertainty; CO₂e-consistent warming-share denominator
+- Web API layer for per-event liability tables
 
 ## Wiki Navigation
 
