@@ -58,7 +58,7 @@ pre-industrial) and fitted Gaussian/log-normal tails near the record maximum. Th
 (`src/attribution/shift_fit.py`) rescales the observed pool to pre-industrial via a smoothed FaIR
 GMST covariate (counterfactual covariate = 0) and fits a **GEV** to the block maxima — additive for
 temperature, multiplicative (Clausius-Clapeyron) for precipitation. Black Summer PR=4.0 now matches
-the WWA FWI lower bound exactly.
+the WWA ERA5 FWI7x-SM lower bound (">4"; see [[2026-06-24-literature-cross-check]]).
 
 ### 5. α metric mislabel corrected (documentation)
 The CMIP6 SE-AU amplification (0.935) was documented as "fire-season tasmax" but notebook 02

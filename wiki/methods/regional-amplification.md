@@ -5,7 +5,7 @@ tags: [amplification, regional, cmip6, era5, australia, fire-season, queensland,
 related: [far-probability-ratio, emissions-to-forcing, findings/2026-05-23-australia-regional-amplification, findings/2026-05-24-observed-amplification, findings/2026-05-26-qld-floods-regional-amplification, era5-reanalysis, cmip6, 2026-06-13-methodology-revision]
 status: active
 confidence: medium
-last_updated: 2026-06-13
+last_updated: 2026-07-02
 ---
 
 # Regional Amplification
@@ -87,7 +87,7 @@ flood extremes. See [[findings/2026-05-26-qld-floods-regional-amplification]].
 ## Which Value to Use
 
 **SE Australia (Black Summer)**: The GEV shift-fit uses **β = α = 0.726** (ERA5 fire-season,
-additive) as primary → PR = 4.0. CMIP6 α = 0.935 is a sensitivity (PR = 5.2).
+additive) as primary → PR = 4.0. CMIP6 α = 0.935 is a sensitivity (PR = 6.3).
 
 **SE QLD (2022 Floods)**: The multiplicative shift-fit uses **β = ln(1+CC)·α** with **α = 0.289**
 (ERA5 wet-season, conservative) as primary → PR = 1.11. CMIP6 α = 0.882 is a sensitivity (PR = 1.39).

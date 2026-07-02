@@ -23,9 +23,9 @@ last_updated: 2026-05-26
 ## Attribution
 
 ### No WWA Published Study
-No World Weather Attribution (WWA) rapid attribution study was published for this event.
-Attribution is built from ERA5 precipitation using a multiplicative (Clausius-Clapeyron) GEV
-shift-fit (see [[methods/far-probability-ratio]] and notebook 07).
+No World Weather Attribution (WWA) rapid attribution study — and no probabilistic (PR) attribution study of any kind — was published for this event (confirmed June 2026), so our PR=1.11 remains the sole quantitative estimate. Attribution is built from ERA5 precipitation using a multiplicative (Clausius-Clapeyron) GEV shift-fit (see [[methods/far-probability-ratio]] and notebook 07).
+
+Two 2025 papers characterise the event qualitatively (both emphasising La Niña + warm SST drivers, consistent with our conservative framing) but give no PR: *How February 2022 redefines extreme floods in Australia* (Communications Earth & Environment, doi:10.1038/s43247-025-02307-z) and *A Multiscale Evaluation of the Wet 2022 in Eastern Australia* (Journal of Climate, JCLI-D-24-0224.1).
 
 ### Multiplicative GEV Shift-Fit (Primary)
 **Source**: `notebooks/02-attribution/07_qld_floods_pr_era5.ipynb`; `src/attribution/shift_fit.py`
@@ -41,10 +41,7 @@ exp(β·ΔG), β = ln(1+CC_rate)·α_QLD, with the smoothed FaIR GMST covariate.
 | CC 7%/°C × α=0.882 (CMIP6) | 1.39 [1.17–2.26] | 0.278 | α sensitivity |
 | CC 14%/°C × α=0.289 (dynamic) | 1.23 [1.12–1.67] | 0.189 | Dynamic C-C upper |
 
-**Note**: PR is conservative — driven by ERA5 wet-season land Tmax amplification = 0.289 (very low).
-Precipitation extremes respond more to SST/atmospheric moisture; the CMIP6 α sensitivity (PR=1.39)
-brackets a more realistic value. The CMIP6 hist-nat cross-check was dropped — it lacked the
-quantile/bias correction needed to compare ERA5 and CMIP6 precip thresholds.
+**Note**: PR is conservative — driven by ERA5 wet-season land Tmax amplification = 0.289 (very low). Precipitation extremes respond more to SST/atmospheric moisture; the CMIP6 α sensitivity (PR=1.39) brackets a more realistic value. The CMIP6 hist-nat cross-check was dropped — it lacked the quantile/bias correction needed to compare ERA5 and CMIP6 precip thresholds.
 
 See [[findings/2026-05-26-qld-floods-pr-era5]] for full results.
 
@@ -62,8 +59,7 @@ See [[findings/2026-05-26-qld-floods-regional-amplification]].
 | Total direct economic | ~10 | ~7.0 | QLD/NSW government; NEMA — verify source | Placeholder |
 | Total social cost | TBD | TBD | Research needed — Deloitte/ICA or academic study | Placeholder |
 
-**EM-DAT note**: Records only USD ~726M (fragmented into sub-events — same fragmentation issue
-as Black Summer). Hardcoded ICA/government figures are primary. See [[datasets/emdat]].
+**EM-DAT note**: Records only USD ~726M (fragmented into sub-events — same fragmentation issue as Black Summer). Hardcoded ICA/government figures are primary. See [[datasets/emdat]].
 
 **Damage source to verify**: The AUD 10B central estimate is a placeholder. Candidate sources:
 - Deloitte Access Economics report for Insurance Council of Australia (2022)
@@ -76,11 +72,11 @@ as Black Summer). Hardcoded ICA/government figures are primary. See [[datasets/e
 See [[findings/2026-05-26-qld-floods-liability]] for full entity-level breakdown.
 
 Central scenario (AUD 10B direct damages, PR=1.11, FAR=0.101):
-- **Total Carbon Majors attributed liability: USD 0.53B**
-- Saudi Aramco USD 27M [13–61], ExxonMobil USD 22M, Gazprom USD 20M (incumbents unchanged by the
-  2026-06-17 LEI fix; the headline rose via restored entities — Former Soviet Union, China Coal, Chevron)
-- Apportioned by each entity's **global** warming share (~75% CM coverage); α_QLD enters via the
-  PR shift coefficient β, not as a liability multiplier
+- **Total Carbon Majors attributed liability: USD 0.38B**
+- Former Soviet Union USD 39M, China Coal USD 31M, Saudi Aramco USD 19M [10–43], ExxonMobil USD 16M
+- Apportioned by each entity's **global** warming share (~54% CM coverage = entity CO₂ / total
+  anthropogenic CO₂ FFI+AFOLU; see [[findings/2026-06-24-literature-cross-check]]); α_QLD enters via
+  the PR shift coefficient β, not as a liability multiplier
 
 ## Methodological Notes
 
@@ -96,5 +92,4 @@ attribution (additive shift used for Black Summer). Key differences:
 
 The 2022 SE QLD floods occurred shortly after Australia passed the Climate Change Act 2022
 (legislating 43% emissions reduction by 2030). The floods contributed to political pressure
-around the government's climate response and were cited in subsequent state planning decisions
-around floodplain development in SE Queensland.
+around the government's climate response and were cited in subsequent state planning decisions around floodplain development in SE Queensland.

@@ -28,7 +28,7 @@ End-to-end pipeline proven on two events: **Black Summer 2019–20** and **2022 
 | `02-attribution/05_observed_amplification` | ERA5 observed SE AU fire-season amplification (0.726, primary β) | `observed_amplification_factor.csv` |
 | `03-liability/01_black_summer_liability` | End-to-end liability, global-share apportionment | `black_summer_liability.parquet` |
 
-**Headline result:** GEV shift-fit PR=4.0 [2.4–15.4], FAR=0.752, central Carbon Majors liability **USD 3.92B** (AUD 10B direct damages). The primary PR sits exactly at the WWA FWI lower bound (PR≥4). Liability is apportioned by each entity's **global** warming share — Carbon Majors collectively cover **~75%** of global fossil CO₂ (close to the ~71% Heede figure), so absorb ~75% of climate-attributed damages. Damage accounting (~44× range from insured losses to total social cost) is the dominant uncertainty, not the attribution science.
+**Headline result:** GEV shift-fit PR=4.0 [2.4–15.4], FAR=0.752, central Carbon Majors liability **USD 2.78B** (AUD 10B direct damages). The primary PR sits at the WWA ERA5 FWI7x-SM lower bound (PR>4). Liability is apportioned by each entity's **global** warming share — Carbon Majors collectively cover **~54%** of total anthropogenic CO₂ (FFI + AFOLU), so absorb ~54% of climate-attributed damages — matching the peer-reviewed benchmark (Stuart-Smith et al. 2025, *Nature*, ~54%; Ekwurzel 2017, ~42–50%). Damage accounting (~44× range from insured losses to total social cost) is the dominant uncertainty, not the attribution science.
 
 **CMIP6 PR null result:** Independent CMIP6 hist vs hist-nat gave PR≈0.6 (wrong direction). Root cause: available hist-nat models underestimate Australian warming. The GEV shift-fit builds its counterfactual from the observed ERA5 record itself (no CMIP6 needed) and matches WWA; CMIP6 hist-nat is retained as a documented null-result reference only.
 
@@ -40,7 +40,7 @@ End-to-end pipeline proven on two events: **Black Summer 2019–20** and **2022 
 | `02-attribution/07_qld_floods_pr_era5` | ERA5 precip multiplicative GEV shift-fit (no WWA study exists) | `qld_floods_pr_shiftfit_bootstrap.parquet` |
 | `03-liability/02_qld_floods_liability` | End-to-end liability, global-share apportionment | `qld_floods_liability.parquet` |
 
-**Headline result:** Multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability **USD 0.53B** (AUD 10B damages, placeholder — needs verification). PR is a conservative lower bound: ERA5 wet-season land Tmax amplification (α=0.289) underestimates the SST-driven moisture forcing relevant to QLD flood extremes; the CMIP6 α=0.882 sensitivity gives PR=1.39, FAR=0.28.
+**Headline result:** Multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability **USD 0.38B** (AUD 10B damages, placeholder — needs verification). PR is a conservative lower bound: ERA5 wet-season land Tmax amplification (α=0.289) underestimates the SST-driven moisture forcing relevant to QLD flood extremes; the CMIP6 α=0.882 sensitivity gives PR=1.39, FAR=0.28.
 
 **Methodological note:** Both events use a WWA-style **nonstationary GEV shift-fit** referenced to pre-industrial (`src/attribution/shift_fit.py`) — additive for Black Summer temperature, multiplicative (Clausius-Clapeyron) for QLD precipitation. See `wiki/findings/2026-06-13-methodology-revision.md` for the methodology revision that replaced the earlier Gaussian approaches.
 

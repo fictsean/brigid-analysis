@@ -20,9 +20,12 @@ notebook: notebooks/03-liability/01_black_summer_liability.ipynb
 >
 > **Data fix 2026-06-17** ([[2026-06-17-lei-dropna-fix]]). The `cm_entity_year.parquet` aggregation
 > was silently dropping ~562 GtCO₂e of null-LEI emitters (Former Soviet Union, China Coal, Chevron,
-> NIOC…), understating collective coverage as 44.6%. Corrected to **75.5%**. Central liability
-> USD 2.31B → **USD 3.92B**. Incumbents (Aramco, ExxonMobil) are unchanged; the rise comes entirely
-> from the restored entities, which now lead the rankings.
+> NIOC…), understating collective coverage as 44.6%; the restored entities now lead the rankings.
+>
+> **Denominator fix 2026-06-24** ([[2026-06-24-literature-cross-check]]). The warming-share
+> denominator moved from fossil-CO₂-only to **total anthropogenic CO₂ (FFI + AFOLU)**, correcting an
+> over-attribution (collective 75.5% → **53.6%**, matching Stuart-Smith et al. 2025 ~54%). Central
+> liability USD 3.92B → **USD 2.78B**. The numbers below reflect this latest fix.
 
 End-to-end attribution chain applied to the 2019–20 Australian bushfire season. Combines Carbon
 Majors emissions, FaIR warming attribution, and the GEV shift-fit PR.
@@ -37,7 +40,7 @@ entity_liability = global_warming_share × FAR × total_damages
 ## Probability Ratio (PR)
 
 Primary PR from the nonstationary GEV shift-fit (notebook 04, [[2026-05-24-black-summer-pr-era5]]):
-**PR = 4.0 [2.4–15.4], FAR = 0.752**. This matches the WWA FWI lower bound (PR ≥ 4). Liability
+**PR = 4.0 [2.4–15.4], FAR = 0.752**. This matches the WWA ERA5 FWI7x-SM lower bound (">4"). Liability
 uncertainty is propagated from the PR bootstrap; the FaIR ensemble cancels in every warming *share*
 and so contributes no liability spread (see the methodology revision note).
 
@@ -56,23 +59,23 @@ axis, kept separate from the PR axis (a joint PR × damages grid is in the noteb
 
 | Scenario | Damages | FAR [5–95%] | Total CM liability |
 |----------|---------|-------------|---------------------|
-| Conservative | AUD 2.3B | 0.752 [0.59–0.93] | **USD 0.91B** [0.71–1.13] |
-| **Central (PRIMARY)** | **AUD 10B** | **0.752 [0.59–0.93]** | **USD 3.92B** [3.07–4.87] |
-| Comprehensive | AUD 103B | 0.752 [0.59–0.93] | **USD 40.4B** [31.6–50.2] |
+| Conservative | AUD 2.3B | 0.752 [0.59–0.93] | **USD 0.65B** [0.51–0.80] |
+| **Central (PRIMARY)** | **AUD 10B** | **0.752 [0.59–0.93]** | **USD 2.78B** [2.18–3.46] |
+| Comprehensive | AUD 103B | 0.752 [0.59–0.93] | **USD 28.7B** [22.4–35.6] |
 
-Carbon Majors collectively account for ~75% of global fossil CO₂; these figures are that fraction
-of the climate-attributed damages. The remaining ~25% is attributable to emitters outside the
+Carbon Majors collectively account for ~54% of total anthropogenic CO₂ (FFI + AFOLU); these figures
+are that fraction of the climate-attributed damages. The remaining ~46% is attributable to emitters outside the
 database. The 5–95% range is from the PR bootstrap.
 
 ## Top 5 Entity Liability — Central Scenario (USD millions)
 
 | Rank | Entity | Type | USD M [5–95%] |
 |------|--------|------|---------------|
-| 1 | Former Soviet Union (1900–1991) | Nation State | 408 [319–507] |
-| 2 | China (Coal, 1945–2004) | Nation State | 317 [248–394] |
-| 3 | Saudi Aramco | State-owned | 197 [154–244] |
-| 4 | Chevron | Investor-owned | 182 [142–226] |
-| 5 | ExxonMobil | Investor-owned | 165 [130–206] |
+| 1 | Former Soviet Union (1900–1991) | Nation State | 289 [227–360] |
+| 2 | China (Coal, 1945–2004) | Nation State | 225 [176–279] |
+| 3 | Saudi Aramco | State-owned | 139 [109–173] |
+| 4 | Chevron | Investor-owned | 129 [101–160] |
+| 5 | ExxonMobil | Investor-owned | 117 [92–146] |
 
 Rankings are stable across all scenarios. (Former Soviet Union, China Coal and Chevron were absent
 before the 2026-06-17 LEI fix — see [[2026-06-17-lei-dropna-fix]].)
@@ -92,13 +95,13 @@ total social cost), far larger than the PR/FAR uncertainty (FAR 5–95% spans 0.
 
 ## Caveats
 
-1. **PR is a defensible central estimate**, matching WWA FWI (PR≥4); WWA MSR (PR=9) implies higher
-   exposure (FAR≈0.89 → ~USD 4.6B central).
+1. **PR is a defensible central estimate**, matching WWA ERA5 FWI7x-SM (">4"); WWA MSR (">9") implies higher
+   exposure (FAR≈0.89 → ~USD 3.3B central).
 2. **Scope 3 contested**: most attributed warming comes from product combustion. If liability
    frameworks exclude scope 3, per-entity figures shrink substantially (scope-1 sensitivity in
    notebook 01-exploration/01).
 3. **Legal ≠ physical**: risk-proportional estimates, not legal determinations.
-4. **Carbon Majors coverage**: ~75% of global fossil CO₂ — total climate-attributed damages are
+4. **Carbon Majors coverage**: ~54% of total anthropogenic CO₂ (FFI + AFOLU) — total climate-attributed damages are
    larger than the CM share computed here.
 
 ## Outputs

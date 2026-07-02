@@ -49,10 +49,14 @@ The `wiki/` directory is an Obsidian vault following the LLMwiki pattern — fil
 - `wiki/findings/` — dated research conclusions from notebooks
 - `wiki/concepts/` — scientific, legal, economic terms
 - `wiki/models/` — ML/statistical models built
+- `wiki/references/` — one page per cited paper/report, each with the article hyperlink (DOI/URL)
+
+Every paper referenced in the wiki must have its own `wiki/references/<slug>.md` entry with a working
+article hyperlink. See the **References** section of `wiki/INDEX.md` for the manifest.
 
 Frontmatter schema used across wiki pages:
 ```yaml
-type: entity | disaster | dataset | method | finding | concept | model
+type: entity | disaster | dataset | method | finding | concept | model | reference
 tags: [...]
 related: [other-page-slugs]
 status: stub | active | settled
@@ -99,12 +103,12 @@ last_updated: YYYY-MM-DD
 4. `02-attribution/01_emissions_to_warming.ipynb` — FaIR v2.2 warming attribution, 841-config AR6 posterior ensemble
 5. `02-attribution/02_australia_regional_amplification.ipynb` — CMIP6 historical SE AU amplification factor; ACCESS-CM2 + ACCESS-ESM1-5
 6. `02-attribution/03_black_summer_pr_cmip6.ipynb` — independent PR computation from CMIP6 hist vs hist-nat; null result PR=0.6; do not use for liability
-7. `02-attribution/04_black_summer_pr_era5.ipynb` — **nonstationary GEV shift-fit** (thin caller of `src/attribution/shift_fit.py`); primary β=0.726 → PR=4.0 [2.4–15.4], FAR=0.752; sensitivities β=0.935 (PR=5.2) and fitted (PR=18.7, rejected); fully local (no CMIP6 streaming)
+7. `02-attribution/04_black_summer_pr_era5.ipynb` — **nonstationary GEV shift-fit** (thin caller of `src/attribution/shift_fit.py`); primary β=0.726 → PR=4.0 [2.4–15.4], FAR=0.752; sensitivities β=0.935 (PR=6.3) and fitted (PR=18.7, rejected); fully local (no CMIP6 streaming)
 8. `02-attribution/05_observed_amplification.ipynb` — ERA5 observed SE AU fire-season amplification = 0.726 (primary β); CMIP6 annual-tas = 0.935 (sensitivity); shows valid β-sensitivity of PR (invalid PR×ratio correction removed)
-9. `03-liability/01_black_summer_liability.ipynb` — end-to-end chain (thin caller of `build_liability_table`); **global-share apportionment**; primary PR=4.0, FAR=0.752 → central USD 3.92B; conservative/central/comprehensive damage scenarios share the primary FAR; PR-bootstrap uncertainty
+9. `03-liability/01_black_summer_liability.ipynb` — end-to-end chain (thin caller of `build_liability_table`); **global-share apportionment**; primary PR=4.0, FAR=0.752 → central USD 2.78B; conservative/central/comprehensive damage scenarios share the primary FAR; PR-bootstrap uncertainty
 10. `02-attribution/06_qld_floods_regional_amplification.ipynb` — SE QLD warming amplification (annual-mean tas); CMIP6 median α_QLD=0.882 (only 2 models — p05/p95 are interpolation, not sampling); ERA5 observed wet-season Tmax α_QLD=0.289 (primary β); `warming_qld_*` columns are diagnostic only (not used in liability)
 11. `02-attribution/07_qld_floods_pr_era5.ipynb` — **multiplicative GEV shift-fit** for 2022 SE QLD floods; 2022=3rd of 60 wet seasons; primary CC 7%/°C × α=0.289 → PR=1.11 [1.05–1.30], FAR=0.101 (conservative lower bound); sensitivities CMIP6 α=0.882 (PR=1.39), dynamic 14%/°C (PR=1.23); fitted β rejected (ENSO-contaminated); CMIP6 hist-nat dropped (units confound)
-12. `03-liability/02_qld_floods_liability.ipynb` — QLD floods end-to-end liability; global-share apportionment; central USD 0.53B (AUD 10B × FAR=0.101); Saudi Aramco central USD 27M [13–61] (incumbent entities ~unchanged by the LEI fix); EM-DAT REDACTED-DISNO (value redacted, EM-DAT DUA) supports AUD 10B as plausible
+12. `03-liability/02_qld_floods_liability.ipynb` — QLD floods end-to-end liability; global-share apportionment; central USD 0.38B (AUD 10B × FAR=0.101); Saudi Aramco central USD 19M [10–43]; EM-DAT REDACTED-DISNO (value redacted, EM-DAT DUA) supports AUD 10B as plausible
 
 ### Source modules
 - `src/attribution/shift_fit.py` — `shift_fit_gev`, `fit_gev`: nonstationary GEV shift-fit (additive + multiplicative)
@@ -113,12 +117,13 @@ last_updated: YYYY-MM-DD
 - `src/attribution/gmst.py` — FaIR GMST covariate helpers (load, extrapolate, smooth, event sigma)
 - `src/attribution/constants.py` — `AUD_TO_USD` (keyed by year), CC rates, climatology baseline
 - `src/data/emdat.py` — `load_emdat()`, `search_events()`, `get_event_damages()` helpers
-- `scripts/build_notebooks.py` — regenerates notebooks 04/05/07/01-liab/02-liab as thin callers and executes them
+- `scripts/build_notebooks.py` — regenerates notebooks 04/05/07/01-liab/02-liab as thin callers and executes them; self-validates via the harness after rebuilding
+- `src/attribution/validation.py` + `scripts/validate_pipeline.py` + `tests/validation_benchmarks.json` — **validation harness**: pins headline outputs against literature (Stuart-Smith 2025, Ekwurzel, AR6, WWA) + internal-consistency + frozen golden benchmarks; `python3 scripts/validate_pipeline.py` exits non-zero on drift
 
 ### Key processed files
 - `data/processed/cm_entity_year.parquet` — entity × year emissions
 - `data/processed/cm_cumulative_summary.parquet` — cumulative totals and global share per entity
-- `data/processed/entity_warming_contribution.parquet` — per-entity warming (p05/p50/p95), `global_share` (apportionment basis), + warming_au_*/warming_qld_* (diagnostic only)
+- `data/processed/entity_warming_contribution.parquet` — per-entity warming (p05/p50/p95), `global_share` (apportionment basis = entity CO₂ / total anthropogenic CO₂ FFI+AFOLU), + warming_au_*/warming_qld_* (diagnostic only)
 - `data/processed/fair_global_temperature.parquet` — FaIR ensemble temperature timeseries
 - `data/processed/au_amplification_factor.csv` — per-model SE AU amplification (annual-mean tas): ACCESS-CM2 1.030, ACCESS-ESM1-5 0.841, median 0.935, ERA5_observed 0.726 (fire-season)
 - `data/processed/qld_amplification_factor.csv` — per-model SE QLD amplification (annual-mean tas): ACCESS-CM2 0.364, ACCESS-ESM1-5 1.401, median 0.882, ERA5_observed 0.289 (wet-season)
@@ -140,14 +145,16 @@ last_updated: YYYY-MM-DD
 - `wiki/findings/2026-05-18-black-summer-liability.md`
 - `wiki/findings/2026-05-23-australia-regional-amplification.md` — CMIP6 SE AU amplification 0.935 (ACCESS-CM2, ACCESS-ESM1-5)
 - `wiki/findings/2026-05-24-black-summer-pr-cmip6.md` — CMIP6 PR verification null result (PR=0.6); available hist-nat model subset does not reproduce AU warming signal; WWA PR values stand
-- `wiki/findings/2026-05-24-black-summer-pr-era5.md` — GEV shift-fit; primary β=0.726 → PR=4.0 [2.4–15.4], FAR=0.752; matches WWA FWI lower bound
+- `wiki/findings/2026-05-24-black-summer-pr-era5.md` — GEV shift-fit; primary β=0.726 → PR=4.0 [2.4–15.4], FAR=0.752; matches WWA ERA5 FWI7x-SM lower bound (">4")
 - `wiki/findings/2026-05-24-observed-amplification.md` — ERA5 fire-season amplification = 0.726 (primary β); CMIP6 annual-tas 0.935 (sensitivity); invalid PR×ratio correction removed
 - `wiki/findings/2026-05-25-emdat-ingest.md` — EM-DAT ingest; 17,849 records; Black Summer fragmented into sub-events (Currowan USD 2B); hardcoded PBO/ICA scenarios remain primary
 - `wiki/findings/2026-05-26-qld-floods-regional-amplification.md` — CMIP6 α_QLD=0.882 (annual tas, 2 models); ERA5 observed=0.289 (wet-season Tmax, primary β)
 - `wiki/findings/2026-05-26-qld-floods-pr-era5.md` — multiplicative GEV shift-fit: PR=1.11 [1.05–1.30], FAR=0.101; CMIP6 hist-nat dropped (units confound); 2022=3rd of 60 seasons
-- `wiki/findings/2026-05-26-qld-floods-liability.md` — central USD 0.53B (AUD 10B × FAR=0.101); Saudi Aramco USD 27M; damage uncertainty dominates
+- `wiki/findings/2026-05-26-qld-floods-liability.md` — central USD 0.38B (AUD 10B × FAR=0.101); Saudi Aramco USD 19M; damage uncertainty dominates
 - `wiki/findings/2026-06-13-methodology-revision.md` — **canonical record of the methodology fixes**: global-share apportionment, GEV shift-fit, real uncertainty, removed PR×ratio; Black Summer 5.08B→2.31B
-- `wiki/findings/2026-06-17-lei-dropna-fix.md` — **LEI dropna data-loss bug**: entity-year groupby silently dropped 562 GtCO₂e of null-LEI emitters (Former Soviet Union, China Coal, Chevron, NIOC…); collective share 44.6%→75.5%; Black Summer 2.31B→3.92B, QLD 0.31B→0.53B; incumbent entities (Aramco) ~unchanged
+- `wiki/findings/2026-06-17-lei-dropna-fix.md` — **LEI dropna data-loss bug**: entity-year groupby silently dropped 562 GtCO₂e of null-LEI emitters (Former Soviet Union, China Coal, Chevron, NIOC…); collective share 44.6%→75.5%; incumbent entities (Aramco) ~unchanged (numbers later revised by the 2026-06-24 denominator fix)
+- `wiki/findings/2026-06-24-literature-cross-check.md` — **literature cross-check + denominator fix**: collective warming share 75.5%→53.6% (fossil-CO₂ → total-CO₂ FFI+AFOLU denominator; matches Stuart-Smith 2025 ~54%); Black Summer 3.92B→2.78B, QLD 0.53B→0.38B; fixed Ekwurzel Aramco anchor; added validation harness (`scripts/validate_pipeline.py`)
+- `wiki/references/stuart-smith-2025.md` — Nature 2025 carbon-majors heatwave attribution; primary external benchmark (~54% collective, Aramco ~0.04°C)
 
 ## Current Status / Next Steps
 
@@ -155,19 +162,22 @@ End-to-end pipeline proven on two events and refactored into `src/attribution/` 
 callers). See `wiki/findings/2026-06-13-methodology-revision.md` for the full list of corrections.
 
 **Black Summer**: nonstationary GEV shift-fit, primary β=0.726 → PR=4.0 [2.4–15.4], FAR=0.752,
-central Carbon Majors liability **USD 3.92B** (global-share apportionment). Matches WWA FWI lower bound (PR≥4).
+central Carbon Majors liability **USD 2.78B** (global-share apportionment). Matches WWA ERA5 FWI7x-SM lower bound (PR>4).
 
 **QLD Floods 2022**: multiplicative GEV shift-fit, primary PR=1.11 [1.05–1.30], FAR=0.101, central
-Carbon Majors liability **USD 0.53B** (AUD 10B damages placeholder). Conservative lower bound — driven
+Carbon Majors liability **USD 0.38B** (AUD 10B damages placeholder). Conservative lower bound — driven
 by low ERA5 wet-season land Tmax amplification (α_QLD=0.289); CMIP6 α=0.882 sensitivity gives PR=1.39.
 Central damages (AUD 10B) still need verification from QLD Treasury / Deloitte / NEMA.
 
-**Apportionment convention**: liability = entity **global** warming share × FAR × damages. Carbon
-Majors collectively cover **~75%** of the global fossil-CO₂ denominator (close to the ~71% Heede
-figure; the ~75% is slightly inflated by the known CO₂e-numerator vs CO₂-FFI-denominator mismatch —
-see next steps), so they absorb ~75% of climate-attributed damages — shares are NOT normalised within
-the group. (Prior ~45% was a bug — the entity-year aggregation silently dropped ~562 GtCO₂e of
-null-LEI emitters; fixed 2026-06-17, see `wiki/findings/2026-06-17-lei-dropna-fix.md`.)
+**Apportionment convention**: liability = entity **global** warming share × FAR × damages, where the
+share = entity cumulative CO₂ / **total anthropogenic CO₂ (FFI + AFOLU)**. Carbon Majors collectively
+cover **~54%** of that denominator → ~0.63°C attributed warming, matching peer review (Stuart-Smith
+et al. 2025 *Nature* ~54%; Ekwurzel 2017 ~42–50%). Shares are NOT normalised within the group; the
+remaining ~46% is attributable to emitters outside the database. (NB: ~71% Heede is a share of
+*emissions*, not warming — do not conflate.) Two prior bugs corrected: the LEI-dropna data loss
+(2026-06-17) and the fossil-CO₂-only denominator that over-attributed at ~76% (2026-06-24,
+see `wiki/findings/2026-06-24-literature-cross-check.md`). A validation harness
+(`scripts/validate_pipeline.py`) now pins these against literature/internal benchmarks.
 
 **ERA5 CDS download note**: New CADS quota system (2024) rejects requests over ~10,000–15,000 time steps × grid area. For precipitation downloads use decade batches at 4x/day (00/06/12/18 UTC) — each batch ~7,440 fields, well within limits.
 
@@ -175,6 +185,6 @@ Immediate next steps:
 - Verify AUD 10B central damage estimate for QLD floods (Deloitte/QLD Treasury/NEMA source)
 - Add third event to test pipeline generalisability (now straightforward — `src/attribution` reusable)
 - Quantify GEV distribution-form uncertainty (currently a single parametric fit per pool)
-- CO₂e-consistent global denominator for the warming-share calculation (see emissions-to-forcing)
+- Fully CO₂e-consistent global denominator (the 2026-06-24 fix moved to total CO₂ = FFI + AFOLU, giving ~54% collective share; folding in non-CO₂ forcers on a CO₂e basis is the remaining refinement — see emissions-to-forcing)
 - Reinstate a reproducible producer for the QLD ERA5 wet-season α=0.289 (`ERA5_observed` row in `qld_amplification_factor.csv`) — currently an orphan value carried in the CSV and preserved by nb06's save cell; no notebook recomputes it (see `wiki/findings/2026-06-17-lei-dropna-fix.md`)
 - Design web API layer for serving per-event liability tables

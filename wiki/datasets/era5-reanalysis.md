@@ -42,7 +42,7 @@ CMIP6 historical runs underestimate SE Australian warming (~0.93× amplification
 ERA5 is provided under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Any use of ERA5 data or derivatives must:
 
 1. **Credit** Copernicus Climate Change Service (C3S) / ECMWF
-2. **Cite**: Hersbach et al. (2023), DOI: 10.24381/cds.f17050d7
+2. **Cite**: the CDS product (DOI: 10.24381/cds.f17050d7) and the reanalysis paper [[hersbach-2020]]
 3. **Include disclaimer**: "Contains modified Copernicus Climate Change Service information. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains."
 4. **Link to the license**: https://creativecommons.org/licenses/by/4.0/
 

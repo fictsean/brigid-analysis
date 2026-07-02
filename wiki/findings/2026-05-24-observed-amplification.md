@@ -5,7 +5,7 @@ tags: [amplification, era5, cmip6, australia, fire-season, calibration]
 related: [2026-05-23-australia-regional-amplification, 2026-05-24-black-summer-pr-era5, 2026-05-18-black-summer-liability, era5-reanalysis, 2026-06-13-methodology-revision]
 status: active
 confidence: medium
-last_updated: 2026-06-13
+last_updated: 2026-07-02
 notebook: notebooks/02-attribution/05_observed_amplification.ipynb
 ---
 
@@ -49,7 +49,7 @@ Higher β → larger counterfactual shift → higher PR. This is the correct non
 | β | Source | PR | FAR |
 |---|--------|-----|-----|
 | **0.726** | ERA5 fire-season (PRIMARY) | **4.0** [2.4–15.4] | **0.752** |
-| 0.935 (fit 0.84) | CMIP6 annual tas | 5.2 [2.9–24] | 0.806 |
+| 0.935 | CMIP6 annual tas | 6.3 [3.3–35] | 0.842 |
 
 ## Caveats
 

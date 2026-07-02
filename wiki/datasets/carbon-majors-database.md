@@ -17,7 +17,7 @@ Traces historical fossil fuel and cement production — and associated CO2/CH4 e
 - ~71% of global industrial GHG emissions since 1854 traceable to named entities in this database
 - Covers oil, gas, coal, and cement producers
 - Includes both scope 1 (operational) and scope 3 (end-use combustion) emissions
-- Updated periodically by Climate Accountability Institute; original methodology: Heede (2014)
+- Updated periodically by Climate Accountability Institute; original methodology: [[heede-2014]]
 
 ## Access
 

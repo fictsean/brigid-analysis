@@ -47,11 +47,11 @@ Completed:
 - Full Carbon Majors ingestion (1,435 GtCO₂e, 178 entities, 1854–2024)
 - FaIR v2.2 emissions-to-warming attribution (841-config AR6 posterior ensemble)
 - SE Australia regional amplification — CMIP6 annual-tas median 0.935; ERA5 fire-season 0.726 (primary β)
-- **Black Summer 2019–20**: GEV shift-fit PR=4.0 [2.4–15.4], FAR=0.752, central Carbon Majors liability USD 3.92B (matches WWA FWI lower bound)
+- **Black Summer 2019–20**: GEV shift-fit PR=4.0 [2.4–15.4], FAR=0.752, central Carbon Majors liability USD 2.78B (matches WWA ERA5 FWI7x-SM lower bound, PR>4)
 - CMIP6 hist vs hist-nat PR verification — null result (PR=0.6); retained as reference only
 - EM-DAT ingestion for programmatic damage lookup (17,849 records); Black Summer fragmented so hardcoded PBO/ICA scenarios remain primary
 - SE QLD regional amplification — CMIP6 annual-tas median 0.882; ERA5 wet-season Tmax 0.289 (primary β, conservative)
-- **2022 SE QLD Floods**: multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability USD 0.53B (AUD 10B placeholder damages)
+- **2022 SE QLD Floods**: multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability USD 0.38B (AUD 10B placeholder damages)
 
 Pending:
 - Verify AUD 10B central damage estimate for QLD floods (QLD Treasury / Deloitte / NEMA)

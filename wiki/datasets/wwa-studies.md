@@ -29,7 +29,8 @@ Where a WWA study exists for the same event:
 3. WWA is never used as a direct input to the liability formula
 
 For Black Summer 2019–20, our GEV shift-fit (primary β=0.726) gives PR=4.0 [2.4–15.4], FAR=0.752 —
-sitting **exactly at the WWA FWI lower bound** (PR ≥ 4). See [[findings/2026-05-24-black-summer-pr-era5]].
+sitting at the WWA **ERA5 FWI7x-SM** lower bound (">4", the observational metric; the model-based FWI
+gave only "≥30%"). See [[findings/2026-05-24-black-summer-pr-era5]].
 
 ## Key Facts
 
@@ -49,15 +50,15 @@ sitting **exactly at the WWA FWI lower bound** (PR ≥ 4). See [[findings/2026-0
 
 | Event | Metric | PR | FAR | Source |
 |-------|--------|----|-----|--------|
-| Black Summer 2019–20 | Fire Weather Index (FWI) | ≥4 | ≥75% | van Oldenborgh et al. (2021) |
-| Black Summer 2019–20 | Monthly Severity Rating (MSR) | ≥9 | ≥89% | van Oldenborgh et al. (2021) |
-| Black Summer 2019–20 | Heat component | ~10 | ~90% | van Oldenborgh et al. (2021) |
+| Black Summer 2019–20 | ERA5 FWI7x-SM (observational) | >4 | >75% | van Oldenborgh et al. (2021) |
+| Black Summer 2019–20 | Model-based FWI (conservative) | ≥1.3 (≥30%) | ≥23% | van Oldenborgh et al. (2021) |
+| Black Summer 2019–20 | Monthly Severity Rating (MSR) | >9 | >89% | van Oldenborgh et al. (2021) |
+| Black Summer 2019–20 | Heat component | ~10 (obs) / ≥2 (models) | ~90% | van Oldenborgh et al. (2021) |
 
 ## Key Methodological Papers
 
-- Philip et al. (2020) "A protocol for probabilistic extreme event attribution analyses" — WWA standard methodology
-- van Oldenborgh et al. (2021) — Black Summer attribution, *Nat. Hazards Earth Syst. Sci.*,
-  DOI: 10.5194/nhess-21-941-2021
+- [[philip-2020]] — "A protocol for probabilistic extreme event attribution analyses" (WWA standard methodology)
+- [[van-oldenborgh-2021]] — Black Summer attribution, *Nat. Hazards Earth Syst. Sci.*
 
 ## Caveats
 

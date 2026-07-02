@@ -8,10 +8,11 @@ of the Carbon Majors subtotal:
     liability_entity = global_warming_share_entity × FAR × total_damages
 
 Under TCRE proportionality the warming share equals the emissions share
-(entity cumulative CO2e / global cumulative fossil CO2 — the FaIR ΔT cancels
-in the ratio), so `global_share` from entity_warming_contribution.parquet is
-used directly. The Carbon Majors collectively absorb ~45% of climate-attributed
-damages; the remainder is attributable to emitters outside the database.
+(entity cumulative CO2e / global cumulative *total* anthropogenic CO2 (FFI +
+AFOLU) — the FaIR ΔT cancels in the ratio), so `global_share` from
+entity_warming_contribution.parquet is used directly. The Carbon Majors
+collectively absorb ~54% of climate-attributed damages (Stuart-Smith et al.
+2025 benchmark); the remainder is attributable to emitters outside the database.
 
 Uncertainty convention
 ----------------------

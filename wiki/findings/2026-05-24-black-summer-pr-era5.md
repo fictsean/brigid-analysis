@@ -5,7 +5,7 @@ tags: [era5, probability-ratio, black-summer, attribution, liability, gev, shift
 related: [era5-reanalysis, cmip6, far-probability-ratio, 2026-05-24-black-summer-pr-cmip6, 2026-05-18-black-summer-liability, 2026-06-13-methodology-revision]
 status: active
 confidence: medium
-last_updated: 2026-06-13
+last_updated: 2026-07-02
 notebook: notebooks/02-attribution/04_black_summer_pr_era5.ipynb
 ---
 
@@ -40,7 +40,7 @@ notebook: notebooks/02-attribution/04_black_summer_pr_era5.ipynb
 | FAR | **0.752** [0.59–0.93] |
 | GEV shape ξ | −0.21 (bounded upper tail) |
 | 2019 anomaly | +1.30°C vs 1961–1990 (exceeded by 9 of 59 seasons) |
-| Total Carbon Majors liability — central (AUD 10B) | **USD 3.92B** [3.07–4.87] (2026-06-17 LEI fix; see [[2026-06-17-lei-dropna-fix]]) |
+| Total Carbon Majors liability — central (AUD 10B) | **USD 2.78B** [2.18–3.46] (2026-06-24 denominator fix; see [[2026-06-24-literature-cross-check]]) |
 
 The 2019 season is not the hottest in the record (2018 at +3.38°C is the outlier), so the PR
 reflects a moderate-severity threshold, not the extreme tail.
@@ -50,8 +50,13 @@ reflects a moderate-severity threshold, not the extreme tail.
 | Shift coefficient β | Source | PR | FAR |
 |---------------------|--------|-----|-----|
 | **0.726** | ERA5 fire-season amplification | **4.0** [2.4–15.4] | **0.752** |
-| 0.935 (→ fit 0.84) | CMIP6 annual-mean tas amplification | 5.2 [2.9–24] | 0.806 |
+| 0.935 | CMIP6 annual-mean tas amplification | 6.3 [3.3–35] | 0.842 |
 | fitted (1.40) | data-driven OLS on covariate | 18.7 [5.5–154] | 0.947 |
+
+> **2026-07-02 rebuild note.** The CMIP6 sensitivity previously read PR=5.2 with a stored β of
+> 0.841 — a stale median computed when `au_amplification_factor.csv` still contained the
+> ERA5_observed row (median of 3 values = 0.841). The CSV is now CMIP6-only, so the rebuild uses
+> the correct median β=0.935 → PR=6.3. Primary result and liability are unaffected.
 
 The data-driven fitted β (1.40) is dominated by the 2018 outlier season and produces an unstable
 upper tail (the bounded GEV pushes the counterfactual probability toward zero), so it is **not**
@@ -59,8 +64,10 @@ used as the primary. The prescribed β=0.726 is stable and independently corrobo
 
 ## Validation against WWA
 
-WWA (van Oldenborgh et al. 2021) reported FWI PR ≥ 4 (FAR ≥ 0.75) and heat-MSR PR ≥ 9. The primary
-shift-fit (PR = 4.0, FAR = 0.752) sits **exactly at the WWA FWI lower bound** — a much better
+WWA (van Oldenborgh et al. 2021) reported, for the **ERA5 FWI7x-SM** metric, a probability increase
+of **">4"** (FAR > 0.75), and ">9" for the Monthly Severity Rating; the model-based FWI gave only
+"≥30%" (PR ≥ 1.3), which WWA note is an underestimate. The primary shift-fit (PR = 4.0, FAR = 0.752)
+sits **at the WWA ERA5 FWI7x-SM lower bound** — a much better
 agreement than the superseded Gaussian approaches (hist-nat PR=1.8; detrended PR=3.8), and now on a
 principled extreme-value footing referenced to pre-industrial.
 

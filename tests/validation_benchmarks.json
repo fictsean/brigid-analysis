@@ -1,0 +1,149 @@
+{
+  "_README": "Pinned validation benchmarks for the attribution pipeline. Each entry's `metric` maps to a value computed by src/attribution/validation.py from the git-tracked data/processed outputs. `category`: literature = external published anchor (with DOI in `source`); internal = self-consistency/conservation; golden = frozen pipeline output to catch silent drift. `gating`: true entries fail the build (exit 1) when out of range. Run: python3 scripts/validate_pipeline.py",
+  "benchmarks": [
+    {
+      "metric": "collective_warming_fraction",
+      "category": "literature",
+      "gating": true,
+      "range": [0.45, 0.62],
+      "unit": "fraction",
+      "source": "Stuart-Smith et al. 2025, Nature, doi:10.1038/s41586-025-09450-9 (~0.54 of warming); Ekwurzel et al. 2017, Climatic Change, doi:10.1007/s10584-017-1978-0 (~0.42-0.50 of GMST rise)",
+      "notes": "Collective Carbon Majors share of TOTAL anthropogenic warming. Pre-denominator-fix this reads ~0.755 (fossil-CO2-only denominator applied to all-forcing warming) and FAILS by design; the total-CO2 (FFI+AFOLU) denominator fix brings it into the literature range."
+    },
+    {
+      "metric": "collective_warming_degC",
+      "category": "literature",
+      "gating": true,
+      "range": [0.55, 0.78],
+      "unit": "degC",
+      "source": "Stuart-Smith et al. 2025, Nature, doi:10.1038/s41586-025-09450-9 (0.7 degC of 1.3 degC, to 2023)",
+      "notes": "Collective Carbon Majors attributed warming (our analysis is to 2020, theirs to 2023, so a slightly lower absolute value is expected)."
+    },
+    {
+      "metric": "aramco_warming_degC",
+      "category": "literature",
+      "gating": true,
+      "range": [0.025, 0.052],
+      "unit": "degC",
+      "source": "Stuart-Smith et al. 2025, Nature, doi:10.1038/s41586-025-09450-9 (Saudi Aramco ~0.04 degC heatwave-intensity contribution)",
+      "notes": "Per-entity scale check. Passes both pre- and post-denominator-fix (~0.045 -> ~0.031), confirming the per-entity magnitude is right; the COLLECTIVE share is the drift, not the per-entity scale."
+    },
+    {
+      "metric": "fair_warming_2011_2020_degC",
+      "category": "literature",
+      "gating": true,
+      "range": [1.00, 1.12],
+      "unit": "degC",
+      "source": "IPCC AR6 WG1 SPM: human-induced warming ~1.07 degC for 2010-2019 vs 1850-1900",
+      "notes": "FaIR ensemble median validation against the assessed best estimate."
+    },
+    {
+      "metric": "blacksummer_pr",
+      "category": "literature",
+      "gating": true,
+      "range": [3.5, 4.6],
+      "unit": "ratio",
+      "source": "van Oldenborgh et al. 2021, NHESS 21:941, doi:10.5194/nhess-21-941-2021 (ERA5 FWI7x-SM probability increased by 'more than a factor of 4')",
+      "notes": "Our GEV shift-fit primary PR vs the WWA ERA5 FWI7x-SM lower bound (>4). Not the model-FWI '>=30%' result."
+    },
+    {
+      "metric": "blacksummer_far",
+      "category": "literature",
+      "gating": true,
+      "range": [0.70, 0.80],
+      "unit": "fraction",
+      "source": "van Oldenborgh et al. 2021, NHESS 21:941, doi:10.5194/nhess-21-941-2021 (FAR = 1 - 1/PR for PR>4 => FAR>0.75)",
+      "notes": "Primary FAR consistent with WWA ERA5 FWI7x-SM lower bound."
+    },
+    {
+      "metric": "qld_pr",
+      "category": "literature",
+      "gating": true,
+      "range": [1.04, 1.22],
+      "unit": "ratio",
+      "source": "No published probabilistic attribution exists for the Feb-Mar 2022 SE QLD floods (confirmed June 2026). Conservative lower bound from our multiplicative GEV shift-fit (CC 7%/degC x alpha=0.289).",
+      "notes": "Sole quantitative estimate; sanity bracket only."
+    },
+    {
+      "metric": "qld_far",
+      "category": "literature",
+      "gating": true,
+      "range": [0.04, 0.16],
+      "unit": "fraction",
+      "source": "Derived from qld_pr (FAR = 1 - 1/PR). No external anchor.",
+      "notes": "Conservative lower bound."
+    },
+    {
+      "metric": "cm_total_2024_GtCO2e",
+      "category": "internal",
+      "gating": true,
+      "range": [1434.0, 1437.0],
+      "unit": "GtCO2e",
+      "source": "Conservation: cm_entity_year.parquet must reproduce the raw Carbon Majors total (1854-2024). Guards the LEI-dropna class of bug (see wiki/findings/2026-06-17-lei-dropna-fix.md).",
+      "notes": "If this fails, the entity-year aggregation silently dropped rows."
+    },
+    {
+      "metric": "n_entities",
+      "category": "internal",
+      "gating": true,
+      "range": [178, 178],
+      "unit": "count",
+      "source": "Carbon Majors 2026 release: 178 parent entities after the LEI-dropna fix.",
+      "notes": "Drops below 178 indicate null-key dropping reintroduced."
+    },
+    {
+      "metric": "share_warming_coherence_max_abs",
+      "category": "internal",
+      "gating": true,
+      "range": [0.0, 1e-6],
+      "unit": "degC",
+      "source": "Internal: warming_p50_degC must equal global_share * FaIR(2020) ΔT for every entity (TCRE proportionality).",
+      "notes": "Confirms the warming columns are global_share x total ΔT and nothing decoupled them."
+    },
+    {
+      "metric": "blacksummer_liability_reproduces_resid_usd_b",
+      "category": "internal",
+      "gating": true,
+      "range": [0.0, 0.02],
+      "unit": "USD_B",
+      "source": "Internal: black_summer_scenario_totals central total must equal sum(global_share) x FAR x damages.",
+      "notes": "Reproduces the liability identity from first principles."
+    },
+    {
+      "metric": "cm_total_2022_GtCO2e",
+      "category": "literature",
+      "gating": false,
+      "range": [1340.0, 1445.0],
+      "unit": "GtCO2e",
+      "source": "InfluenceMap circulated ~1,421 GtCO2e through 2022, but the 2026 release publishes NO headline total and the figure is UNVERIFIED (see wiki/findings/2026-06-17). Informational only.",
+      "notes": "Our load gives ~1,367 Gt through 2022; reported for transparency, not gated."
+    },
+    {
+      "metric": "collective_share",
+      "category": "golden",
+      "gating": true,
+      "range": [0.520, 0.552],
+      "unit": "fraction",
+      "source": "Frozen 2026-06-24 after the total-CO2 (FFI+AFOLU) denominator fix. Carbon Majors share of total anthropogenic CO2.",
+      "notes": "Drift guard. Tighter than the literature fraction band; flags any silent change to the denominator/apportionment."
+    },
+    {
+      "metric": "blacksummer_central_usd_b",
+      "category": "golden",
+      "gating": true,
+      "range": [2.70, 2.86],
+      "unit": "USD_B",
+      "source": "Frozen 2026-06-24: Black Summer central-scenario total Carbon Majors liability (AUD 10B x FAR 0.752 x collective share).",
+      "notes": "Drift guard on the headline liability number."
+    },
+    {
+      "metric": "qld_central_usd_b",
+      "category": "golden",
+      "gating": true,
+      "range": [0.365, 0.392],
+      "unit": "USD_B",
+      "source": "Frozen 2026-06-24: QLD floods central-scenario total Carbon Majors liability (AUD 10B x FAR 0.101 x collective share).",
+      "notes": "Drift guard on the headline liability number."
+    }
+  ]
+}

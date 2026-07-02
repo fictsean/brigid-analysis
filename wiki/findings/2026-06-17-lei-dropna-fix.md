@@ -16,6 +16,8 @@ discarded **~562 GtCO₂e** of emissions — every emitter whose `lei` (Legal En
 Identifier) field is null. This understated every downstream warming share and liability
 figure. Fixed 2026-06-17.
 
+> **Numbers superseded (2026-06-24).** The "after" figures on this page (collective 75.5%, Black Summer 3.92B, QLD 0.53B) were correct given the *fossil-CO₂-only denominator* in use at the time. The denominator was later changed to **total anthropogenic CO₂ (FFI + AFOLU)** to match peer review ([[2026-06-24-literature-cross-check]]), revising collective coverage to **53.6%**, Black Summer to **2.78B** and QLD to **0.38B**. The data-loss diagnosis and fix below are unchanged and still current; only the headline magnitudes were revised by the later denominator fix.
+
 ## The bug
 
 ```python

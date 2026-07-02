@@ -41,16 +41,14 @@ We use FaIR v2.2 (Finite Amplitude Impulse Response model) with the fair-calibra
 
 Key implementation choices:
 - **Proportional attribution** rather than per-entity model runs: entity_warming = (entity_cumulative_CO2e / global_cumulative_fossil_CO2) × FaIR_ΔT. Valid under TCRE linearity.
-- **Global denominator**: RCMIP CO2 FFI historical emissions (consistent with Global Carbon Project)
+- **Global denominator**: RCMIP CO2 FFI **+ CO2 AFOLU** historical emissions (total anthropogenic CO₂)
 - **Uncertainty**: 841-member posterior ensemble gives 5–95th percentile warming ranges
 - **Validation**: FaIR median gives 1.04°C for 2011–2020 vs IPCC AR6 best estimate of 1.07°C ✓
 
-**Known unit caveat**: the entity numerator is cumulative CO₂**e** (including operational CH₄ at
-GWP-100) while the global denominator is CO₂ FFI only, and the share is applied to *total*
-anthropogenic ΔT (which also includes land-use, non-fossil CH₄, and aerosol offsets). This modestly
-inflates gas-heavy entities and the headline "~75% of warming" coverage figure (close to the ~71%
-Heede figure; the excess is partly this unit mismatch). Within-Carbon-Majors rankings are largely
-unaffected. A CO₂e-consistent denominator is a tracked follow-up.
+**Denominator (fixed 2026-06-24)**: the global denominator is **total anthropogenic CO₂ (FFI +
+AFOLU)**, not FFI alone. An FFI-only denominator over-attributed — dividing fossil CO₂ by a
+fossil-only base and applying it to *total* all-forcing ΔT put the collective share at ~76%, vs the
+peer-reviewed ~54% ([[stuart-smith-2025]]). With total CO₂ the collective lands at ~54%. **Remaining unit caveat**: the numerator is cumulative CO₂**e** (operational CH₄ at GWP-100) while the denominator is CO₂ only — a fully CO₂e-consistent denominator (non-CO₂ forcers) is the tracked follow-up; it modestly inflates gas-heavy entities but barely moves within-group rankings.
 
 See [[findings/2026-05-15-emissions-to-warming]] for results.
 
@@ -58,21 +56,21 @@ See [[findings/2026-05-15-emissions-to-warming]] for results.
 
 ```
 Liability_X = global_warming_share_X × FAR × total_damages
-            = (cumulative_CO2e_X / global_cumulative_fossil_CO2) × FAR × total_damages
+            = (cumulative_CO2e_X / global_cumulative_total_CO2) × FAR × total_damages
 ```
 
 Entity X is charged its share of **total global** warming — not its share of the Carbon Majors
-subtotal. The named Carbon Majors collectively cover ~75% of global fossil CO₂, so they absorb ~75%
-of the climate-attributed damages; the rest is attributable to emitters outside the database.
-Normalising within the Carbon Majors group (so shares sum to 1) would over-charge every entity ~2.2×
-— see [[2026-06-13-methodology-revision]]. Under TCRE linearity the FaIR ΔT cancels in the share
-ratio, so the warming share equals the cumulative-emissions share.
+subtotal. The named Carbon Majors collectively cover ~54% of total anthropogenic CO₂ (FFI + AFOLU), so they absorb ~54% of the climate-attributed damages; the rest is attributable to emitters outside the database. Normalising within the Carbon Majors group (so shares sum to 1) would over-charge every entity ~2.2× — see [[2026-06-13-methodology-revision]]. Under TCRE linearity the FaIR ΔT cancels in the share ratio, so the warming share equals the cumulative-emissions share.
 
 ## Key References
 
-- Ekwurzel et al. (2017) — foundational calculation
-- Matthews et al. (2009) — TCRE concept
-- Meinshausen et al. (2011) — MAGICC model
+- [[ekwurzel-2017]] — foundational calculation
+- [[heede-2014]] — Carbon Majors emissions tracing
+- [[matthews-2009]] — TCRE concept (warming ∝ cumulative carbon)
+- [[meinshausen-2011]] — MAGICC model (Ekwurzel's emulator)
+- [[leach-2021]] — FaIRv2.0.0 (our emulator) + [[smith-2024-fair-calibrate]] (the posterior ensemble)
+- [[stuart-smith-2025]] — peer-reviewed ~54% collective benchmark
+- [[ipcc-ar6-wg1]] — warming validation anchor
 
 ## Related
 

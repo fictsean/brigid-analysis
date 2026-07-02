@@ -436,7 +436,8 @@ bs_liab = [
 
 End-to-end liability with the **corrected apportionment convention**: each entity is charged
 its share of **total** anthropogenic warming (`global_share`), not its share of the Carbon
-Majors subtotal. The Carbon Majors collectively absorb ~75% of climate-attributed damages;
+Majors subtotal. The Carbon Majors collectively absorb ~54% of climate-attributed damages
+(share of total anthropogenic CO₂, FFI + AFOLU — Stuart-Smith et al. 2025 benchmark);
 the rest is attributable to emitters outside the database.
 
 - **PR/FAR**: nonstationary GEV shift-fit, primary PR ≈ 4.0, FAR ≈ 0.75 (notebook 04).
@@ -446,7 +447,7 @@ the rest is attributable to emitters outside the database.
     ("code", PREAMBLE),
     ("code", """\
 ew = pd.read_parquet(PROC / 'entity_warming_contribution.parquet')
-print(f'Carbon Majors coverage of global fossil CO2: {ew[\"global_share\"].sum()*100:.1f}%')
+print(f'Carbon Majors coverage of total anthropogenic CO2 (FFI+AFOLU): {ew[\"global_share\"].sum()*100:.1f}%')
 
 # PR from notebook 04 (primary) + bootstrap samples for FAR uncertainty
 pr_df = pd.read_csv(PROC / 'black_summer_pr_era5.csv')
@@ -471,7 +472,7 @@ liability, totals = build_liability_table(ew, scenarios)
 liability.to_parquet(PROC / 'black_summer_liability.parquet', index=False)
 totals.to_csv(PROC / 'black_summer_scenario_totals.csv', index=False)
 
-print('Scenario totals (Carbon Majors, ~75% of global):')
+print('Scenario totals (Carbon Majors, ~54% of global):')
 print(totals[['scenario', 'damages_usd_b', 'far', 'far_p05', 'far_p95',
               'total_attributed_usd_b']].to_string(index=False))
 print(f'\\nPRIMARY (central): USD {totals.set_index(\"scenario\").loc[\"central\",\"total_attributed_usd_b\"]:.2f}B '
@@ -570,7 +571,7 @@ liability, totals = build_liability_table(ew, scenarios)
 liability.to_parquet(PROC / 'qld_floods_liability.parquet', index=False)
 totals.to_csv(PROC / 'qld_floods_scenario_totals.csv', index=False)
 
-print('Scenario totals (Carbon Majors, ~75% of global):')
+print('Scenario totals (Carbon Majors, ~54% of global):')
 print(totals[['scenario', 'damages_usd_b', 'far', 'far_p05', 'far_p95',
               'total_attributed_usd_b']].to_string(index=False))
 print('\\nTop 10 entities — central scenario (USD M):')
@@ -618,3 +619,19 @@ if __name__ == "__main__":
         nb = build(path, cells)
         execute(path, nb)
     print("\\nAll done.")
+
+    # Self-validate the refreshed outputs against pinned literature/internal benchmarks.
+    try:
+        sys.path.insert(0, str(ROOT / "src"))
+        from attribution.validation import (
+            compute_metrics, load_benchmarks, evaluate, gating_failures,
+        )
+        results = evaluate(compute_metrics(), load_benchmarks())
+        fails = gating_failures(results)
+        print(f"validation: {sum(r['status']=='PASS' for r in results)} pass, "
+              f"{len(fails)} gating failure(s) "
+              f"(run scripts/validate_pipeline.py for the full report)")
+        for r in fails:
+            print(f"  ✗ {r['metric']}: {r['actual']:.4g} not in {r['range']}")
+    except Exception as e:  # never block a rebuild on the validator itself
+        print(f"validation skipped: {e}")

@@ -5,7 +5,7 @@ tags: [attribution, statistics, extreme-events, gev, shift-fit, bootstrap, preci
 related: [cmip6, era5-reanalysis, wwa-studies, findings/2026-05-18-black-summer-liability, findings/2026-05-26-qld-floods-pr-era5, findings/2026-05-26-qld-floods-liability, 2026-06-13-methodology-revision]
 status: active
 confidence: high
-last_updated: 2026-06-13
+last_updated: 2026-07-02
 ---
 
 # Fraction of Attributable Risk (FAR) and Probability Ratio (PR)
@@ -57,12 +57,14 @@ factual climate is the observed record, not a model's version of it.
 | β (shift coefficient) | Source | PR | FAR | Role |
 |-----------------------|--------|-----|-----|------|
 | **0.726** | ERA5 fire-season amplification | **4.0 [2.4–15.4]** | **0.752** | **Primary** |
-| 0.935 | CMIP6 annual-tas amplification | 5.2 [2.9–24] | 0.806 | Sensitivity |
+| 0.935 | CMIP6 annual-tas amplification | 6.3 [3.3–35] | 0.842 | Sensitivity |
 | fitted (1.40) | data-driven OLS | 18.7 [5.5–154] | 0.947 | Rejected (outlier-driven, unstable) |
-| — | WWA FWI (van Oldenborgh 2021) | ≥4 | ≥0.75 | Peer-reviewed validation |
-| — | WWA heat-MSR | ≥9 | ≥0.89 | Peer-reviewed validation |
+| — | WWA ERA5 FWI7x-SM (van Oldenborgh 2021) | >4 | >0.75 | Peer-reviewed validation |
+| — | WWA model-FWI (conservative) | ≥1.3 | ≥0.23 | Context (models underestimate) |
+| — | WWA heat-MSR | >9 | >0.89 | Peer-reviewed validation |
 
-The primary (PR=4.0) sits exactly at the WWA FWI lower bound.
+The primary (PR=4.0) sits at the WWA **ERA5 FWI7x-SM** lower bound (">4") — the observational metric,
+not the model-based FWI ("≥30%").
 
 ### 2022 SE QLD Floods (multiplicative, precip 7-day max)
 
@@ -101,9 +103,9 @@ precipitation thresholds. See [[findings/2026-05-24-black-summer-pr-cmip6]].
 
 ## Key References
 
-- Philip et al. (2020) — WWA standard protocol (shift-fit with covariate)
-- van Oldenborgh et al. (2021) — Black Summer attribution, *NHESS*
-- Stott et al. (2016) — attribution of extreme weather events
+- [[philip-2020]] — WWA standard protocol (shift-fit with covariate)
+- [[van-oldenborgh-2021]] — Black Summer attribution, *NHESS*
+- [[stott-2016]] — attribution of extreme weather events
 
 ## Related
 
