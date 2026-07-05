@@ -229,6 +229,10 @@ data/raw/*
 # EM-DAT processed output excluded — Data Use Agreement prohibits redistribution
 data/processed/emdat_disasters.parquet
 
+# Pangeo CMIP6 catalog cache — large (~77 MB) and regenerable from pangeo/GCS; not tracked
+data/processed/pangeo-cmip6.csv
+data/processed/pangeo-cmip6.json
+
 # Outputs that regenerate from notebooks
 outputs/figures/*
 !outputs/figures/.gitkeep
