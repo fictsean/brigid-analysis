@@ -1,0 +1,4 @@
+# Strip notebook outputs from the EM-DAT ingest notebook so EM-DAT record-level
+# data can never be committed again (EM-DAT Data Use Agreement — no redistribution).
+# Requires `nbstripout` configured as the `nbstripout` clean filter (see wiki/datasets/emdat.md).
+notebooks/01-exploration/03_emdat_ingest.ipynb filter=nbstripout

@@ -27,17 +27,17 @@ use in the liability pipeline.
 
 ## Black Summer Validation
 
-EM-DAT contains **2 wildfire records** for AUS 2019:
+EM-DAT contains **2 wildfire records** for AUS 2019, but neither represents the whole event.
 
-| DisNo. | Name | total_damage_usd | total_damage_usd_2020 |
-|--------|------|------------------|-----------------------|
-| REDACTED-DISNO | (unnamed) | NaN | NaN |
-| REDACTED-DISNO | Currowan | (redacted) | (redacted) |
+> **EM-DAT record values redacted.** A table of the individual EM-DAT records (DisNos and damage
+> figures) previously appeared here; it has been removed to comply with the EM-DAT Data Use
+> Agreement, which prohibits redistribution of record-level data (see [[datasets/emdat]]). The
+> methodological point below does not depend on the specific values.
 
-**Key finding**: EM-DAT fragments Black Summer into individual named fire events rather than
-recording the season as a whole. The per-event record (value redacted, EM-DAT DUA) is far below the Parliamentary
-Budget Office whole-of-season direct economic estimate of AUD 10B (USD 6.9B). For Black Summer,
-hardcoded PBO/ICA scenarios remain primary.
+**Key finding**: EM-DAT fragments Black Summer into individual named fire events (e.g. the
+"Currowan" fire) rather than recording the season as a whole, and the largest recorded per-event
+damage is far below the Parliamentary Budget Office whole-of-season direct economic estimate of
+AUD 10B (USD 6.9B). For Black Summer, hardcoded PBO/ICA scenarios remain primary.
 
 **Generalization implication**: EM-DAT is reliable for discrete events (single flood, cyclone,
 earthquake) that map 1:1 to a `DisNo.` — `get_event_damages()` works as intended. For complex
