@@ -5,7 +5,7 @@ tags: [disasters, damages, deaths, foundational]
 related: [era5-reanalysis, wwa-studies, methods/attribution-chain]
 status: active
 confidence: high
-last_updated: 2026-05-25
+last_updated: 2026-07-05
 ---
 
 # EM-DAT International Disaster Database
@@ -34,14 +34,33 @@ Field mapping to our damage scenarios:
 
 ## License and Attribution
 
-Data obtained under the [EM-DAT Data Use Agreement](https://www.emdat.be/terms-conditions).
+Data obtained under the [EM-DAT Terms of Use](https://doc.emdat.be/docs/legal/terms-of-use/)
+(verified 2026-07-05). Access is free but **conditional and restricted** — it is *not* an open
+(CC-BY) licence. Authorised users are academic/research institutions, international public
+organisations, national governments, and media agencies, for research/teaching/information purposes.
 
-**Obligations**:
-1. **Cite** in any output or publication:
-   > EM-DAT: The Emergency Events Database — Université catholique de Louvain (UCL) — CRED,
-   > D. Guha-Sapir — www.emdat.be, Brussels, Belgium.
-2. **No redistribution** to third parties without prior written consent from CRED.
-3. **Non-commercial** use only.
+**Prohibitions (quoted from the Terms of Use)** — users shall not:
+1. "Reproduce, copy, communicate, lend, or otherwise distribute EM-DAT or a substantial part of EM-DAT";
+2. "Share, use or transmit any portion of EM-DAT via the Internet to unauthorized users";
+3. "Create substitute or derivative databases of EM-DAT";
+4. Make any **commercial** use of EM-DAT (including its data and derivative products) except under a
+   separate paid Database License Agreement.
+
+**Citation** ([Citation Policy](https://doc.emdat.be/docs/legal/citation-policy/)):
+> EM-DAT, CRED / UCLouvain, Brussels, Belgium — www.emdat.be
+
+### ⚠️ Implication for the public web app (verified 2026-07-05)
+
+**EM-DAT-derived figures must NOT be surfaced in the public explorer app.** Publishing them would
+(a) "transmit … EM-DAT via the Internet to unauthorized users" (the general public are not
+authorised users), and (b) risk the JSON catalog being a prohibited "derivative database". The
+non-commercial clause is a further constraint if brigid.earth is ever monetised.
+
+**Resolution — no pipeline change needed.** The pipeline already treats EM-DAT as an *internal
+validation cross-check only*; the primary `total_damages` inputs are independently-sourced
+ICA/Deloitte/government figures (see [[disasters/qld-floods-2022]], [[disasters/black-summer-2019-20]]).
+Guardrail for `scripts/export_web_catalog.py` (Phase 2): the exporter must read damage figures from
+the independently-sourced event specs, never from `emdat_disasters.parquet`.
 
 **Compliance**: Raw data (`data/raw/emdat/`) and the processed parquet
 (`data/processed/emdat_disasters.parquet`) are both excluded from version control.

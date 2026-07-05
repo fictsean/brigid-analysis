@@ -51,13 +51,12 @@ Completed:
 - CMIP6 hist vs hist-nat PR verification — null result (PR=0.6); retained as reference only
 - EM-DAT ingestion for programmatic damage lookup (17,849 records); Black Summer fragmented so hardcoded PBO/ICA scenarios remain primary
 - SE QLD regional amplification — CMIP6 annual-tas median 0.882; ERA5 wet-season Tmax 0.289 (primary β, conservative)
-- **2022 SE QLD Floods**: multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability USD 0.38B (AUD 10B placeholder damages)
+- **2022 SE QLD Floods**: multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability USD 0.29B (AUD 7.7B damages — Deloitte total cost, QLD govt-commissioned, verified 2026-07-05)
 
 Pending:
-- Verify AUD 10B central damage estimate for QLD floods (QLD Treasury / Deloitte / NEMA)
 - Add third event to test pipeline generalisability (src/attribution is reusable)
 - Quantify GEV distribution-form uncertainty; CO₂e-consistent warming-share denominator
-- Web API layer for per-event liability tables
+- Build the platform: see [[ROADMAP]] (event-spec core → static explorer app → agentic ingestion)
 
 ## Wiki Navigation
 

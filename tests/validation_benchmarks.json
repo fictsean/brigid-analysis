@@ -140,9 +140,9 @@
       "metric": "qld_central_usd_b",
       "category": "golden",
       "gating": true,
-      "range": [0.365, 0.392],
+      "range": [0.284, 0.298],
       "unit": "USD_B",
-      "source": "Frozen 2026-06-24: QLD floods central-scenario total Carbon Majors liability (AUD 10B x FAR 0.101 x collective share).",
+      "source": "Frozen 2026-07-05: QLD floods central-scenario total Carbon Majors liability = AUD 7.7B (Deloitte total cost, QLD govt-commissioned) x FAR 0.101 x collective share. Superseded the 2026-06-24 freeze (0.378 at the unsourced AUD 10B placeholder); see wiki/findings/2026-07-05-qld-damage-verification.md.",
       "notes": "Drift guard on the headline liability number."
     }
   ]

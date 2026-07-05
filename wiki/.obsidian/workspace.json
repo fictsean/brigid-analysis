@@ -183,8 +183,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "da3bf52ecc4c8c60",
+  "active": "9f57a5a89982b3fa",
   "lastOpenFiles": [
+    "findings/2026-07-05-qld-damage-verification.md",
+    "ROADMAP.md",
     "findings/2026-06-17-lei-dropna-fix.md",
     "findings/2026-06-24-literature-cross-check.md",
     "references/stuart-smith-2025.md",
@@ -210,8 +212,6 @@
     "findings/2026-05-18-black-summer-liability.md",
     "Welcome.md",
     "findings/2026-05-15-carbon-majors-ingest.md",
-    "2026-05-15.md",
-    "datasets/carbon-majors-database.md",
     "models",
     "concepts",
     "findings",

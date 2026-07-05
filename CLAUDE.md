@@ -108,7 +108,7 @@ last_updated: YYYY-MM-DD
 9. `03-liability/01_black_summer_liability.ipynb` — end-to-end chain (thin caller of `build_liability_table`); **global-share apportionment**; primary PR=4.0, FAR=0.752 → central USD 2.78B; conservative/central/comprehensive damage scenarios share the primary FAR; PR-bootstrap uncertainty
 10. `02-attribution/06_qld_floods_regional_amplification.ipynb` — SE QLD warming amplification (annual-mean tas); CMIP6 median α_QLD=0.882 (only 2 models — p05/p95 are interpolation, not sampling); ERA5 observed wet-season Tmax α_QLD=0.289 (primary β); `warming_qld_*` columns are diagnostic only (not used in liability)
 11. `02-attribution/07_qld_floods_pr_era5.ipynb` — **multiplicative GEV shift-fit** for 2022 SE QLD floods; 2022=3rd of 60 wet seasons; primary CC 7%/°C × α=0.289 → PR=1.11 [1.05–1.30], FAR=0.101 (conservative lower bound); sensitivities CMIP6 α=0.882 (PR=1.39), dynamic 14%/°C (PR=1.23); fitted β rejected (ENSO-contaminated); CMIP6 hist-nat dropped (units confound)
-12. `03-liability/02_qld_floods_liability.ipynb` — QLD floods end-to-end liability; global-share apportionment; central USD 0.38B (AUD 10B × FAR=0.101); Saudi Aramco central USD 19M [10–43]; EM-DAT REDACTED-DISNO (value redacted, EM-DAT DUA) supports AUD 10B as plausible
+12. `03-liability/02_qld_floods_liability.ipynb` — QLD floods end-to-end liability; global-share apportionment; central USD 0.29B (AUD 7.7B × FAR=0.101); Saudi Aramco central USD 14.6M [7.5–33]; damages verified 2026-07-05 (Deloitte total cost, QLD govt-commissioned)
 
 ### Source modules
 - `src/attribution/shift_fit.py` — `shift_fit_gev`, `fit_gev`: nonstationary GEV shift-fit (additive + multiplicative)
@@ -150,7 +150,8 @@ last_updated: YYYY-MM-DD
 - `wiki/findings/2026-05-25-emdat-ingest.md` — EM-DAT ingest; 17,849 records; Black Summer fragmented into sub-events (Currowan USD 2B); hardcoded PBO/ICA scenarios remain primary
 - `wiki/findings/2026-05-26-qld-floods-regional-amplification.md` — CMIP6 α_QLD=0.882 (annual tas, 2 models); ERA5 observed=0.289 (wet-season Tmax, primary β)
 - `wiki/findings/2026-05-26-qld-floods-pr-era5.md` — multiplicative GEV shift-fit: PR=1.11 [1.05–1.30], FAR=0.101; CMIP6 hist-nat dropped (units confound); 2022=3rd of 60 seasons
-- `wiki/findings/2026-05-26-qld-floods-liability.md` — central USD 0.38B (AUD 10B × FAR=0.101); Saudi Aramco USD 19M; damage uncertainty dominates
+- `wiki/findings/2026-05-26-qld-floods-liability.md` — central USD 0.29B (AUD 7.7B × FAR=0.101); Saudi Aramco USD 14.6M; damage uncertainty dominates
+- `wiki/findings/2026-07-05-qld-damage-verification.md` — **damage + licence verification**: QLD central AUD 10B→7.7B (Deloitte total cost, QLD govt-commissioned) → USD 0.38B→0.29B; EM-DAT terms bar public-app display of EM-DAT figures
 - `wiki/findings/2026-06-13-methodology-revision.md` — **canonical record of the methodology fixes**: global-share apportionment, GEV shift-fit, real uncertainty, removed PR×ratio; Black Summer 5.08B→2.31B
 - `wiki/findings/2026-06-17-lei-dropna-fix.md` — **LEI dropna data-loss bug**: entity-year groupby silently dropped 562 GtCO₂e of null-LEI emitters (Former Soviet Union, China Coal, Chevron, NIOC…); collective share 44.6%→75.5%; incumbent entities (Aramco) ~unchanged (numbers later revised by the 2026-06-24 denominator fix)
 - `wiki/findings/2026-06-24-literature-cross-check.md` — **literature cross-check + denominator fix**: collective warming share 75.5%→53.6% (fossil-CO₂ → total-CO₂ FFI+AFOLU denominator; matches Stuart-Smith 2025 ~54%); Black Summer 3.92B→2.78B, QLD 0.53B→0.38B; fixed Ekwurzel Aramco anchor; added validation harness (`scripts/validate_pipeline.py`)
@@ -165,9 +166,12 @@ callers). See `wiki/findings/2026-06-13-methodology-revision.md` for the full li
 central Carbon Majors liability **USD 2.78B** (global-share apportionment). Matches WWA ERA5 FWI7x-SM lower bound (PR>4).
 
 **QLD Floods 2022**: multiplicative GEV shift-fit, primary PR=1.11 [1.05–1.30], FAR=0.101, central
-Carbon Majors liability **USD 0.38B** (AUD 10B damages placeholder). Conservative lower bound — driven
-by low ERA5 wet-season land Tmax amplification (α_QLD=0.289); CMIP6 α=0.882 sensitivity gives PR=1.39.
-Central damages (AUD 10B) still need verification from QLD Treasury / Deloitte / NEMA.
+Carbon Majors liability **USD 0.29B** (AUD 7.7B damages — Deloitte Access Economics total cost,
+QLD govt-commissioned, June 2022; verified 2026-07-05). Conservative lower bound — driven by low
+ERA5 wet-season land Tmax amplification (α_QLD=0.289); CMIP6 α=0.882 sensitivity gives PR=1.39.
+Scenarios: conservative AUD 5.81B (ICA insured, QLD+NSW) + central AUD 7.7B (Deloitte total, QLD);
+the earlier AUD 10B/20B placeholders were unsourced and retired (see
+`wiki/findings/2026-07-05-qld-damage-verification.md`).
 
 **Apportionment convention**: liability = entity **global** warming share × FAR × damages, where the
 share = entity cumulative CO₂ / **total anthropogenic CO₂ (FFI + AFOLU)**. Carbon Majors collectively
@@ -181,10 +185,16 @@ see `wiki/findings/2026-06-24-literature-cross-check.md`). A validation harness
 
 **ERA5 CDS download note**: New CADS quota system (2024) rejects requests over ~10,000–15,000 time steps × grid area. For precipitation downloads use decade batches at 4x/day (00/06/12/18 UTC) — each batch ~7,440 fields, well within limits.
 
+**Platform roadmap (2026-07-02)**: `wiki/ROADMAP.md` — the phased plan toward the web platform.
+Decisions: static site + prebuilt JSON (no backend); agentic disaster ingestion as draft + human
+PR review; public/advocacy + researcher dual-audience design. Phases: (1) event-spec core —
+declarative `events/<slug>.yaml` + `run_event()` replacing hand-written notebook specs, must
+reproduce both events bit-for-bit; (2) static explorer app (map + timeline + entity views) from a
+JSON catalog export; (3) agentic ingestion (Claude Code skill first). Supersedes the earlier
+"design web API layer" next step.
+
 Immediate next steps:
-- Verify AUD 10B central damage estimate for QLD floods (Deloitte/QLD Treasury/NEMA source)
-- Add third event to test pipeline generalisability (now straightforward — `src/attribution` reusable)
+- Phase 1 of `wiki/ROADMAP.md`: event-spec core (`events/*.yaml` + `src/attribution/event.py` + `src/data/era5.py` CDS fetcher), then a third event via YAML only
 - Quantify GEV distribution-form uncertainty (currently a single parametric fit per pool)
 - Fully CO₂e-consistent global denominator (the 2026-06-24 fix moved to total CO₂ = FFI + AFOLU, giving ~54% collective share; folding in non-CO₂ forcers on a CO₂e basis is the remaining refinement — see emissions-to-forcing)
-- Reinstate a reproducible producer for the QLD ERA5 wet-season α=0.289 (`ERA5_observed` row in `qld_amplification_factor.csv`) — currently an orphan value carried in the CSV and preserved by nb06's save cell; no notebook recomputes it (see `wiki/findings/2026-06-17-lei-dropna-fix.md`)
-- Design web API layer for serving per-event liability tables
+- Reinstate a reproducible producer for the QLD ERA5 wet-season α=0.289 (`ERA5_observed` row in `qld_amplification_factor.csv`) — currently an orphan value carried in the CSV and preserved by nb06's save cell; no notebook recomputes it (see `wiki/findings/2026-06-17-lei-dropna-fix.md`); folds into Phase 1

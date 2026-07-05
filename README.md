@@ -40,7 +40,7 @@ End-to-end pipeline proven on two events: **Black Summer 2019–20** and **2022 
 | `02-attribution/07_qld_floods_pr_era5` | ERA5 precip multiplicative GEV shift-fit (no WWA study exists) | `qld_floods_pr_shiftfit_bootstrap.parquet` |
 | `03-liability/02_qld_floods_liability` | End-to-end liability, global-share apportionment | `qld_floods_liability.parquet` |
 
-**Headline result:** Multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability **USD 0.38B** (AUD 10B damages, placeholder — needs verification). PR is a conservative lower bound: ERA5 wet-season land Tmax amplification (α=0.289) underestimates the SST-driven moisture forcing relevant to QLD flood extremes; the CMIP6 α=0.882 sensitivity gives PR=1.39, FAR=0.28.
+**Headline result:** Multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central Carbon Majors liability **USD 0.29B** (AUD 7.7B damages — Deloitte total-cost estimate commissioned by the QLD Government, verified July 2026). PR is a conservative lower bound: ERA5 wet-season land Tmax amplification (α=0.289) underestimates the SST-driven moisture forcing relevant to QLD flood extremes; the CMIP6 α=0.882 sensitivity gives PR=1.39, FAR=0.28.
 
 **Methodological note:** Both events use a WWA-style **nonstationary GEV shift-fit** referenced to pre-industrial (`src/attribution/shift_fit.py`) — additive for Black Summer temperature, multiplicative (Clausius-Clapeyron) for QLD precipitation. See `wiki/findings/2026-06-13-methodology-revision.md` for the methodology revision that replaced the earlier Gaussian approaches.
 
@@ -83,7 +83,7 @@ CLAUDE.md           # project context for AI-assisted sessions
 
 ## Wiki
 
-The `wiki/` directory is an Obsidian vault using the LLMwiki pattern — pages are written to serve as LLM context as well as human documentation. Start at `wiki/CONTEXT.md`, navigate via `wiki/INDEX.md`.
+The `wiki/` directory is an Obsidian vault using the LLMwiki pattern — pages are written to serve as LLM context as well as human documentation. Start at `wiki/CONTEXT.md`, navigate via `wiki/INDEX.md`. The phased plan toward the web platform (event-spec generalisation → static explorer app → agentic disaster ingestion) is in `wiki/ROADMAP.md`.
 
 Key sections: `datasets/`, `methods/`, `disasters/`, `findings/`.
 

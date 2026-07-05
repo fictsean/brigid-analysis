@@ -1,6 +1,6 @@
 ---
 type: index
-last_updated: 2026-05-30 (Black Summer liability notebook pipeline fix)
+last_updated: 2026-07-02 (added ROADMAP; fixed ekwurzel-2017 Meta link after move to references/)
 ---
 
 # Wiki Index
@@ -11,7 +11,8 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 
 ## Meta
 - [[CONTEXT]] — project overview, attribution chain, data sources, current phase
-- [[ekwurzel-2017]] — Ekwurzel et al. (2017), foundational paper tracing warming to named producers via MAGICC
+- [[ROADMAP]] — platform roadmap (2026-07-02): generalisability assessment, event-spec core, static explorer app, agentic ingestion
+- [[references/ekwurzel-2017]] — Ekwurzel et al. (2017), foundational paper tracing warming to named producers via MAGICC
 
 ## Datasets
 - [[datasets/carbon-majors-database]] — emissions by company-year 1854–present, Heede (2014), ~100 producers
@@ -31,7 +32,7 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 
 ## Disasters
 - [[disasters/black-summer-2019-20]] — 2019–20 Australian bushfires; GEV shift-fit PR=4.0, FAR=0.752; central CM liability USD 2.78B; AUD 2.3–103B damages
-- [[disasters/qld-floods-2022]] — Feb–Mar 2022 SE Queensland floods; 676mm/3 days; AUD 5.56B insured; no WWA study; multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central CM liability USD 0.38B
+- [[disasters/qld-floods-2022]] — Feb–Mar 2022 SE Queensland floods; 676mm/3 days; AUD 5.81B insured; no WWA study; multiplicative GEV shift-fit PR=1.11 [1.05–1.30], FAR=0.101, central CM liability USD 0.29B (AUD 7.7B Deloitte damages)
 
 ## Concepts
 *(none yet)*
@@ -68,7 +69,8 @@ Flat manifest of all pages. One line per page. Update this whenever a page is ad
 - [[findings/2026-05-25-emdat-ingest]] — EM-DAT ingest; 17,849 records; Black Summer fragmented into sub-events (Currowan USD 2B); hardcoded PBO/ICA scenarios remain primary
 - [[findings/2026-05-26-qld-floods-regional-amplification]] — CMIP6 α_QLD=0.882 (annual tas, 2 models); ERA5 observed=0.289 (wet-season Tmax, primary β)
 - [[findings/2026-05-26-qld-floods-pr-era5]] — multiplicative GEV shift-fit: PR=1.11 [1.05–1.30], FAR=0.101; conservative; CMIP6 hist-nat dropped (units confound); 2022 = 3rd of 60 seasons
-- [[findings/2026-05-26-qld-floods-liability]] — central USD 0.38B (AUD 10B × FAR=0.101); Saudi Aramco USD 19M; damage uncertainty dominates
+- [[findings/2026-05-26-qld-floods-liability]] — central USD 0.29B (AUD 7.7B Deloitte × FAR=0.101); Saudi Aramco USD 14.6M; damage uncertainty dominates
+- [[findings/2026-07-05-qld-damage-verification]] — **damage + EM-DAT licence verification**: QLD central AUD 10B→7.7B (Deloitte total cost, govt-commissioned) → USD 0.38B→0.29B; EM-DAT terms bar public-app display of its figures
 - [[findings/2026-06-13-methodology-revision]] — **canonical record of methodology fixes**: global-share apportionment, GEV shift-fit, real uncertainty, removed PR×ratio; Black Summer 5.08B→2.31B
 - [[findings/2026-06-17-lei-dropna-fix]] — **LEI dropna data-loss bug**: entity-year groupby dropped 562 GtCO₂e of null-LEI emitters; collective share 44.6%→75.5%; incumbents (Aramco) unchanged (later revised by the denominator fix)
 - [[findings/2026-06-24-literature-cross-check]] — **literature cross-check + denominator fix**: collective warming 75.5%→53.6% (total-CO₂ FFI+AFOLU denominator; matches Stuart-Smith 2025 ~54%); Black Summer 3.92B→2.78B, QLD 0.53B→0.38B; added validation harness

@@ -37,8 +37,14 @@ To stop this class of drift (the LEI-dropna bug, this denominator bug) recurring
 | Collective CM coverage | 75.5% | **53.6%** |
 | Collective attributed warming | 0.89°C | **0.63°C** [0.47–0.84] |
 | Black Summer central liability | USD 3.92B | **USD 2.78B** [2.18–3.46] |
-| QLD floods central liability | USD 0.53B | **USD 0.38B** |
+| QLD floods central liability | USD 0.53B | **USD 0.38B** [later USD 0.29B — see note] |
 | Saudi Aramco (Black Summer central) | USD 197M | **USD 139M** [109–173] |
+
+> **Note (2026-07-05)**: the QLD central USD 0.38B here was computed at the then-placeholder AUD 10B
+> damage figure. That figure was later verified and replaced with the Deloitte AUD 7.7B total-cost
+> estimate, giving USD 0.29B. This does not affect the denominator fix documented on this page (a
+> pure `global_share` change); it is a separate damage-input correction. See
+> [[2026-07-05-qld-damage-verification]].
 
 ## Inconsistency 2 (MEDIUM, fixed) — "Heede ~71%" mis-used to validate the warming share
 

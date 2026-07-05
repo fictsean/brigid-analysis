@@ -5,7 +5,7 @@ tags: [flood, australia, queensland, precipitation, 2022]
 related: [era5-reanalysis, cmip6, emdat, far-probability-ratio, findings/2026-05-26-qld-floods-regional-amplification, findings/2026-05-26-qld-floods-pr-era5, findings/2026-05-26-qld-floods-liability]
 status: active
 confidence: medium
-last_updated: 2026-05-26
+last_updated: 2026-07-05
 ---
 
 # 2022 SE Queensland Floods
@@ -53,27 +53,37 @@ See [[findings/2026-05-26-qld-floods-regional-amplification]].
 
 ## Damages
 
-| Estimate | AUD (B) | USD (B) | Source | Status |
-|----------|---------|---------|--------|--------|
-| Insured losses | 5.56 | ~3.9 | Insurance Council of Australia, 236,000 claims | Confirmed |
-| Total direct economic | ~10 | ~7.0 | QLD/NSW government; NEMA — verify source | Placeholder |
-| Total social cost | TBD | TBD | Research needed — Deloitte/ICA or academic study | Placeholder |
+**Verified 2026-07-05** (superseding the earlier AUD 10B / 20B placeholders, which had no source).
 
-**EM-DAT note**: Records only USD ~726M (fragmented into sub-events — same fragmentation issue as Black Summer). Hardcoded ICA/government figures are primary. See [[datasets/emdat]].
+| Estimate | AUD (B) | Source | Scope | Status |
+|----------|---------|--------|-------|--------|
+| Insured losses (final) | 5.81 | Insurance Council of Australia, 240,000+ claims (published Apr 2023) | **QLD + NSW** | Confirmed |
+| **Total cost (economic + social)** | **7.7** | **Deloitte Access Economics** for the QLD Government / QLD Reconstruction Authority, June 2022 (23 LGAs, Gladstone→Gold Coast→Balonne) | **QLD only** | Confirmed |
+| — of which tangible/direct | ~3.2 | homes & commercial buildings AUD 2.0B (~18,000 properties); small business AUD 0.32B; agriculture AUD 0.25B; public infrastructure & other ~AUD 0.65B | QLD only | Confirmed |
+| — of which intangible/social | 4.5 | human & social cost, >500,000 people affected | QLD only | Confirmed |
 
-**Damage source to verify**: The AUD 10B central estimate is a placeholder. Candidate sources:
-- Deloitte Access Economics report for Insurance Council of Australia (2022)
-- Queensland Treasury or QLD Government disaster relief report
-- National Emergency Management Agency (NEMA) final assessment
-- Australian Institute for Disaster Resilience (AIDR)
+The **Deloitte AUD 7.7B** is the authoritative anchor for this event: it was commissioned by the
+Queensland Government, covers exactly our SE QLD event footprint (QLD only), and is the only
+published *total-cost* study of the event. The ICA AUD 5.81B is insured losses for the wider
+QLD+NSW event, so it is a scope-mismatched lower bound (insured < total; QLD is the bulk of the
+event, so it remains internally consistent as a floor).
+
+> **The earlier AUD 10B "direct economic" central and AUD 20B "comprehensive" figures were
+> unsourced placeholders — no source supports them.** As of 2026-07-05 the pipeline uses
+> **conservative AUD 5.81B (ICA insured) + central AUD 7.7B (Deloitte total cost)**; the AUD 20B
+> comprehensive scenario was retired. See [[findings/2026-07-05-qld-damage-verification]].
+
+**EM-DAT note**: Records only USD ~726M (fragmented into sub-events — same fragmentation issue as
+Black Summer). Independently-sourced ICA/Deloitte/government figures are primary; EM-DAT is an
+internal cross-check only and must **not** be surfaced in a public app (see [[datasets/emdat]]).
 
 ## Liability Analysis
 
 See [[findings/2026-05-26-qld-floods-liability]] for full entity-level breakdown.
 
-Central scenario (AUD 10B direct damages, PR=1.11, FAR=0.101):
-- **Total Carbon Majors attributed liability: USD 0.38B**
-- Former Soviet Union USD 39M, China Coal USD 31M, Saudi Aramco USD 19M [10–43], ExxonMobil USD 16M
+Central scenario (AUD 7.7B Deloitte total cost, PR=1.11, FAR=0.101):
+- **Total Carbon Majors attributed liability: USD 0.29B**
+- Former Soviet Union USD 30M, China Coal USD 24M, Saudi Aramco USD 14.6M [7.5–33], ExxonMobil USD 12M
 - Apportioned by each entity's **global** warming share (~54% CM coverage = entity CO₂ / total
   anthropogenic CO₂ FFI+AFOLU; see [[findings/2026-06-24-literature-cross-check]]); α_QLD enters via
   the PR shift coefficient β, not as a liability multiplier

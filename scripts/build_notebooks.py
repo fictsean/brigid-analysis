@@ -543,8 +543,10 @@ Same corrected pipeline as Black Summer: **global-share** apportionment, PR/FAR 
 multiplicative GEV shift-fit (notebook 07), uncertainty from the PR bootstrap.
 
 - **Primary PR ≈ 1.11, FAR ≈ 10%** (CC 7%/°C × α_QLD=0.289 — conservative lower bound).
-- **Damage central AUD 10B remains a placeholder** pending an official QLD Treasury / Deloitte
-  / NEMA figure; EM-DAT records a redacted value for REDACTED-DISNO, consistent with that order."""),
+- **Damage central AUD 7.7B** — Deloitte Access Economics total-cost estimate commissioned by the
+  QLD Government (June 2022, QLD-scope), verified 2026-07-05. Conservative AUD 5.81B is ICA final
+  insured losses (QLD+NSW). The earlier AUD 10B/20B placeholders were unsourced and have been
+  retired. See wiki/findings/2026-07-05-qld-damage-verification.md."""),
     ("code", PREAMBLE),
     ("code", """\
 ew = pd.read_parquet(PROC / 'entity_warming_contribution.parquet')
@@ -556,14 +558,16 @@ PR_PRIMARY = float(primary_row['pr'])
 boot = pd.read_parquet(PROC / 'qld_floods_pr_shiftfit_bootstrap.parquet')['pr_boot'].values
 print(f'Primary PR = {PR_PRIMARY:.3f}, FAR = {far(PR_PRIMARY):.3f}  (bootstrap n={len(boot)})')
 
+# Damage figures verified 2026-07-05 (see wiki/findings/2026-07-05-qld-damage-verification.md).
+# The earlier AUD 10B/20B were unsourced placeholders. Central is now the Deloitte Access
+# Economics total-cost estimate for the QLD Government (AUD 7.7B, QLD-scope, June 2022);
+# conservative is ICA final insured losses (AUD 5.81B, QLD+NSW scope — a scope-mismatched floor).
 FX = AUD_TO_USD[2022]
 scenarios = {
-    'conservative':  dict(damages_usd_b=5.56 * FX, pr=PR_PRIMARY, pr_samples=boot,
-                          label='ICA insured, AUD 5.56B'),
-    'central':       dict(damages_usd_b=10.0 * FX, pr=PR_PRIMARY, pr_samples=boot,
-                          label='Direct economic (placeholder), AUD 10B'),
-    'comprehensive': dict(damages_usd_b=20.0 * FX, pr=PR_PRIMARY, pr_samples=boot,
-                          label='Social cost (placeholder), AUD 20B'),
+    'conservative':  dict(damages_usd_b=5.81 * FX, pr=PR_PRIMARY, pr_samples=boot,
+                          label='ICA insured, final AUD 5.81B (QLD+NSW)'),
+    'central':       dict(damages_usd_b=7.7 * FX, pr=PR_PRIMARY, pr_samples=boot,
+                          label='Deloitte total cost, AUD 7.7B (QLD, govt-commissioned)'),
 }
 """),
     ("code", """\
@@ -588,7 +592,7 @@ print(f'\\nSaudi Aramco central: USD {ar[\"liability_central_USD_M\"].iloc[0]:.1
 # ── Figure: PR × damages sensitivity grid (central uncertainty is small here) ──
 aramco = float(liability.loc[liability['parent_entity'] == 'Saudi Aramco', 'global_share'].iloc[0])
 pr_range = [1.1, 1.2, 1.4, 1.8, 2.5, 4.0]
-dmg_aud  = [5.56, 10, 15, 20, 30, 50]
+dmg_aud  = [5.81, 7.7, 10, 15, 20, 30]
 grid = pd.DataFrame(
     index=[f'PR={p}' for p in pr_range],
     columns=[f'AUD {d}B' for d in dmg_aud],
